@@ -1,0 +1,42 @@
+﻿<Window x:Class="WebAnalyzer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        Height="600"
+        Width="600"
+        Title="Keywords WebAnalyzer made by Łukasz Myśliński"
+        DataContext="{Binding AnalyzerViewModel, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    <StackPanel IsEnabled="{Binding IsNotProccessing}">
+            <DockPanel Height="50">
+                <Label Content="Type url" VerticalAlignment="Center" />
+                <TextBox DockPanel.Dock="Left" TextWrapping="Wrap" Text="{Binding TypedUrl}" Width="430" Height="50" Margin="0,0,5,0"/>
+                <Button DockPanel.Dock="Right" Command="{Binding AnalyzeUrlCommand}" Content="Analyze keywords" HorizontalAlignment="Left" Width="100"/>
+            </DockPanel>
+            <DockPanel>
+                <Label DockPanel.Dock="Left" Content="Status:" />
+            <Label DockPanel.Dock="Right" Content="{Binding Status}" />
+            </DockPanel>
+            <ListView ItemsSource="{Binding FoundKeywords}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Keyword" Width="480" DisplayMemberBinding="{Binding Keyword}" />
+                        <GridViewColumn Header="Occurrence" Width="100" DisplayMemberBinding="{Binding Occurrence}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+  
+</Window>
