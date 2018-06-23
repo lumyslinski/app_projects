@@ -1,0 +1,1 @@
+The purpose of this project is to solve XOR operation by a hidden layer via neural network trained with backpropagation.
