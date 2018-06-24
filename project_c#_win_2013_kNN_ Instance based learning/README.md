@@ -1,0 +1,1 @@
+This project runs instance-based classification method which is the nearest neighbor method called kNN (classic & weighted) in order to show smoothly and colourfull classified instances.
