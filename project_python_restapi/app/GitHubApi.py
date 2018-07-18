@@ -3,8 +3,8 @@ import json
 import sys
 from urllib.error import HTTPError
 from flask_restful import Resource
+import os.path
 
-#this class should be a singleton to set api token once
 class GitHubApi(Resource):
     __apiToken   = None
     __apiUrl     = 'https://api.github.com/repos/{0}/{1}'

@@ -1,12 +1,13 @@
 import urllib.request
 import json
 import unittest
+import os.path
 
 class TestRESTapi(unittest.TestCase):
 
     def test_api(self):
         apiToken = None
-        with open('api.token', 'r') as tokenFile:
+        with open('/api.token', 'r') as tokenFile:
             apiToken = tokenFile.read()
         url = 'https://api.github.com/repos/lumyslinski/app_projects'
         req = urllib.request.Request(url)
