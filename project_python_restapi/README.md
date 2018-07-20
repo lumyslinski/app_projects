@@ -1,4 +1,5 @@
-#About
+# About
+
 Create a simple REST service which will return details of given Github repository. Details should
 include:
 - full name of repository
@@ -28,25 +29,23 @@ account; simply put: application should not have obvious scaling bottlenecks)
 
 It is okay to make tradeoffs or to simplify the solution as long as you leave a note describing
 your thought process.
-Your solution should be delivered as a private git repository on http://bitbucket.org. Create a
-Pull Request​from any branch to master.
-Grant read access to your repository to allegrotech (our bitbucket user) and add this user as a
+Your solution should be delivered as a private git repository on http://bitbucket.org. Create a pull Request from any branch to master. Grant read access to your repository to allegrotech (our bitbucket user) and add this user as a
 reviewer to your Pull Request.
 
-#Project
-Requirements to run this project:
+# Project
+### Requirements to run this project:
 - linux (tested on ubuntu) and 8080 unused port
 - installed chrome
 - installed [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository)
 - installed curl
 - installed ab ( Apache HTTP server benchmarking tool: ``` sudo apt-get install apache2-utils ```)
 
-Problems:
+### Problems:
 - sometimes docker stucks with this error:
   >Error response from daemon: driver failed programming external connectivity on endpoint - 
   ``` docker stop $(docker ps -a -q); docker rm $(docker ps -a -q); docker volume rm $(docker volume ls -qf dangling=true) ```
 
-Structure:
+### Structure:
 - **app**:
     - api.token: it is a file with my secret token to query github api without restrictions
     - GitHubApi.py: it is a class wrapper for github api
@@ -66,7 +65,7 @@ Structure:
 - **RunAppTest.sh**: it runs app tests  
 - #####Run.sh: it runs app in docker and app test, so it is a main start for the project
   
-#Test results
+# Test results
 There are two types of tests in this project:
 1. Unit test to check working functionality (it is in test/unitTest.py)
 2. Stress test to check 20 multiple requests at one time. I used ab (Apache HTTP server benchmarking tool)
@@ -153,7 +152,7 @@ Percentage of the requests served within a certain time (ms)
  100%   4725 (longest request)
 ```
 
-#My steps to solve this project:
+# My steps to solve this project:
 1.Get knowledge about github api:
  - Created user token in order to server 5000 requests per hour from github api. It is a safer method than providing username and password with api url
  - Example of querying github api and response: 
@@ -288,5 +287,5 @@ curl -H "Authorization: token 2e016c12ad016e068eac7116d982406f43c6fc7e" https://
 - tried PycURL, but there was a problem with installing it
 - tried ab (Apache HTTP server benchmarking tool)
 
-###TODO:
+# Final thoughts
 This system could be enhanced with redis to cache requests and responses. Cache time should be reasonable due to refreshing star number.
