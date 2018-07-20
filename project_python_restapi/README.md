@@ -20,7 +20,7 @@ GET /repositories/{owner}/{repository-name}
 }
 ```
 GitHub API reference can be found at: https://developer.github.com/v3/
-####Non functional requirements:
+#### Non functional requirements:
 - should be able to serve 20 requests per second (assuming we have premium GitHub
 account; simply put: application should not have obvious scaling bottlenecks)
 - set of end-to-end tests that can be run easily
@@ -63,7 +63,7 @@ reviewer to your Pull Request.
 - **Dockerfile**: file for running in docker
 - **RunApp.sh**: it runs app in docker
 - **RunAppTest.sh**: it runs app tests  
-- #####Run.sh: it runs app in docker and app test, so it is a main start for the project
+- **Run.sh: it runs app in docker and app test, so it is a main start for the project**
   
 # Test results
 There are two types of tests in this project:
