@@ -280,7 +280,7 @@ curl -H "Authorization: token 2e016c12ad016e068eac7116d982406f43c6fc7e" https://
 4.Make it scalable and ready for production:
 ![Communication flow](communication_flow.png?raw=true "Communication flow")
 - Flask has got only a developer server to debug app. On production it should be connected with uwsgi and nginx to scale and run with full performance. That's why I chose unix socket to bound uWsgi and nginx because it is a fastest method. 
-- Added support of Docker to isolate this project and run out of the box whole application
+- Added support of Docker to isolate this project and run out of the box whole application. I used as a base alpine linux which is the smallest Linux distribution.
 
 5.Run some performance tests (20 requests per second):
 - tried funkload, but there was a problem with running commands
