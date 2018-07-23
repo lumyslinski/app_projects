@@ -149,7 +149,7 @@ Percentage of the requests served within a certain time (ms)
 
 # My steps to solve this project:
 1.Get knowledge about github api:
- - Created user token in order to server 5000 requests per hour from github api. It is a safer method than providing username and password with api url
+ - Created user token in order to serve 5000 requests per hour from github api. It is a safer method than providing username and password with api url
  - Example of querying github api and response: 
  
  ```
