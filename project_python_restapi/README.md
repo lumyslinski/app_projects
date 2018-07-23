@@ -27,11 +27,6 @@ account; simply put: application should not have obvious scaling bottlenecks)
 - good design and quality of code including documentation
 - ready to deploy to production (if additional work is needed, please specify it)
 
-It is okay to make tradeoffs or to simplify the solution as long as you leave a note describing
-your thought process.
-Your solution should be delivered as a private git repository on http://bitbucket.org. Create a pull Request from any branch to master. Grant read access to your repository to allegrotech (our bitbucket user) and add this user as a
-reviewer to your Pull Request.
-
 # Project
 ### Requirements to run this project:
 - linux (tested on ubuntu) and 8080 unused port
