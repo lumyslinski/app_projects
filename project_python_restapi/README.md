@@ -296,6 +296,3 @@ curl -H "Authorization: token {secret-token}" https://api.github.com/repos/lumys
 - tried funkload, but there was a problem with running commands
 - tried PycURL, but there was a problem with installing it
 - tried ab (Apache HTTP server benchmarking tool)
-
-# Final thoughts
-This system could be enhanced with redis to cache requests and responses. Cache time should be reasonable due to refreshing star number.
