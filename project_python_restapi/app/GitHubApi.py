@@ -3,41 +3,25 @@ import json
 import sys
 from urllib.error import HTTPError
 from flask_restful import Resource
-import os.path
+
 
 class GitHubApi(Resource):
-    __apiToken   = None
-    __apiUrl     = 'https://api.github.com/repos/{0}/{1}'
-    __timeoutApi = 60000
+    __apiUrl = 'https://api.github.com/repos/{owner}/{repository}'
 
-    def __init__(self):
+    def get(self, owner, repository, token=''):
+        url = self.__apiUrl.format(owner=owner, repository=repository)
+        req = urllib.request.Request(url, data=None)
+        if len(token) > 0:
+            req.add_header('Authorization', 'token %s' % token)
         try:
-            with open('api.token', 'r') as tokenFile:
-                apiToken = tokenFile.read()
-            #simple check
-            if len(apiToken) != 40:
-                raise ValueError('apiToken is empty or invalid!')
-        except OSError as err:
-            print("OS error [{0}]".format(err))
-        except:
-            print("Unexpected error [{0}]".format(sys.exc_info()[0]))
-            raise
-
-    def get(self,owner,repositoryName):
-        apiUrlReady = self.__apiUrl.format(owner,repositoryName)
-        req = urllib.request.Request(apiUrlReady)
-        req.add_header('Authorization', 'token %s' % self.__apiToken)
-        jsonApiResult = None
-        try:
-            with urllib.request.urlopen(apiUrlReady, timeout=self.__timeoutApi) as response:
-                jsonApiResult = json.loads(response.read())
-            jsonReturnResult = {'fullName':     jsonApiResult['full_name'],
-                                'description':  jsonApiResult['description'],
-                                'cloneUrl':     jsonApiResult['clone_url'],
-                                'stars':        jsonApiResult['stargazers_count'],
-                                'createdAt':    jsonApiResult['created_at']
-                                }
-            return jsonReturnResult
+            with urllib.request.urlopen(req) as response:
+                result = json.loads(response.read())
+                return {'fullName': result['full_name'],
+                        'description': result['description'],
+                        'cloneUrl': result['clone_url'],
+                        'stars': result['stargazers_count'],
+                        'createdAt': result['created_at']
+                        }
         except HTTPError as err:
             return "HTTPError [{0}]".format(err)
         except:

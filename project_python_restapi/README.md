@@ -8,9 +8,9 @@ include:
 - number of stargazers
 - date of creation (ISO 8601 format)
 
-The API of the service might look as follows:
+The API of the service look as follows:
 ```
-GET /repositories/{owner}/{repository-name}
+GET /repositories/{owner}/{repository-name}/{optional-secret-token-from-github}
 {
 "fullName": "...",
 "description": "...",
@@ -47,7 +47,6 @@ reviewer to your Pull Request.
 
 ### Structure:
 - **app**:
-    - api.token: it is a file with my secret token to query github api without restrictions
     - GitHubApi.py: it is a class wrapper for github api
     - MainApp.py: it is an implementation of flask server that starts rest api
     - Wsgi.py: it is a code for starting flask server from uWsgi server
@@ -59,7 +58,8 @@ reviewer to your Pull Request.
 - **test**:
     - funkload: it is a directory of implemenation tests in funkload
     - locusTest.py: it is a simple test for locus package
-    - unitTest.py: it is a unit test for testing querying github api and the response with required data  
+    - unitTestGitHubApi.py: it is a unit test for testing querying github api and the response with required data  
+    - unitTestLocalRestApi.py: it is a unit test for testing rest api locally
 - **Dockerfile**: file for running in docker
 - **RunApp.sh**: it runs app in docker
 - **RunAppTest.sh**: it runs app tests  
@@ -75,81 +75,96 @@ First example is to stress test only when api is running. So I decided to run te
 ```
 ab -n 1000 -c 20 http://localhost:8080/
 
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
 Server Software:        nginx/1.14.0
 Server Hostname:        localhost
 Server Port:            8080
 
 Document Path:          /
-Document Length:        74 bytes
+Document Length:        112 bytes
 
 Concurrency Level:      20
-Time taken for tests:   0.191 seconds
+Time taken for tests:   0.084 seconds
 Complete requests:      1000
 Failed requests:        0
-Total transferred:      223000 bytes
-HTML transferred:       74000 bytes
-Requests per second:    5227.77 [#/sec] (mean)
-Time per request:       3.826 [ms] (mean)
-Time per request:       0.191 [ms] (mean, across all concurrent requests)
-Transfer rate:          1138.47 [Kbytes/sec] received
+Total transferred:      330000 bytes
+HTML transferred:       112000 bytes
+Requests per second:    11960.86 [#/sec] (mean)
+Time per request:       1.672 [ms] (mean)
+Time per request:       0.084 [ms] (mean, across all concurrent requests)
+Transfer rate:          3854.58 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.3      0       2
-Processing:     1    4   2.9      3      25
-Waiting:        1    3   2.9      3      24
-Total:          1    4   2.9      3      25
+Connect:        0    0   0.4      0       2
+Processing:     0    1   0.9      1       6
+Waiting:        0    1   0.8      1       5
+Total:          0    2   1.1      1       7
 
 Percentage of the requests served within a certain time (ms)
-  50%      3
-  66%      4
-  75%      4
-  80%      4
-  90%      5
-  95%      7
-  98%     20
-  99%     22
- 100%     25 (longest request)
+  50%      1
+  66%      2
+  75%      2
+  80%      2
+  90%      3
+  95%      4
+  98%      5
+  99%      6
+ 100%      7 (longest request)
 ```
 Second example is to check when api is working with specified query that invokes github api. This is a fully working example of 50 requests and 20 multiple users at a time 
 ``` 
-ab -n 50 -c 20 http://127.0.0.1:8080/repositories/lumyslinski/app_projects
+ab -n 50 -c 20 http://127.0.0.1:8080/repositories/lumyslinski/app_projects/{secret-token}
 
 Server Software:        nginx/1.14.0
 Server Hostname:        127.0.0.1
 Server Port:            8080
 
-Document Path:          /repositories/lumyslinski/app_projects
+Document Path:          /repositories/lumyslinski/app_projects/{secret-token}
 Document Length:        224 bytes
 
 Concurrency Level:      20
-Time taken for tests:   10.560 seconds
+Time taken for tests:   3.627 seconds
 Complete requests:      50
 Failed requests:        0
-Total transferred:      18700 bytes
+Total transferred:      22100 bytes
 HTML transferred:       11200 bytes
-Requests per second:    4.73 [#/sec] (mean)
-Time per request:       4224.021 [ms] (mean)
-Time per request:       211.201 [ms] (mean, across all concurrent requests)
-Transfer rate:          1.73 [Kbytes/sec] received
+Requests per second:    13.79 [#/sec] (mean)
+Time per request:       1450.721 [ms] (mean)
+Time per request:       72.536 [ms] (mean, across all concurrent requests)
+Transfer rate:          5.95 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.2      0       1
-Processing:   522 3010 938.3   3113    4725
-Waiting:      522 3009 938.3   3113    4725
-Total:        522 3010 938.2   3113    4725
+Connect:        0    1   0.8      0       2
+Processing:     0  848 1231.1      0    3624
+Waiting:        0  848 1231.1      0    3624
+Total:          0  849 1231.7      0    3625
+WARNING: The median and mean for the initial connection time are not within a normal deviation
+        These results are probably not that reliable.
 
 Percentage of the requests served within a certain time (ms)
-  50%   3113
-  66%   3269
-  75%   3680
-  80%   3790
-  90%   4191
-  95%   4223
-  98%   4725
-  99%   4725
- 100%   4725 (longest request)
+  50%      0
+  66%   1129
+  75%   1701
+  80%   2255
+  90%   3069
+  95%   3411
+  98%   3625
+  99%   3625
+ 100%   3625 (longest request)
 ```
 
 # My steps to solve this project:
@@ -158,7 +173,7 @@ Percentage of the requests served within a certain time (ms)
  - Example of querying github api and response: 
  
  ```
-curl -H "Authorization: token 2e016c12ad016e068eac7116d982406f43c6fc7e" https://api.github.com/repos/lumyslinski/app_projects
+curl -H "Authorization: token {secret-token}" https://api.github.com/repos/lumyslinski/app_projects
 {
   "id": 138361396,
   "node_id": "MDEwOlJlcG9zaXRvcnkxMzgzNjEzOTY=",
