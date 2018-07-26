@@ -27,11 +27,6 @@ account; simply put: application should not have obvious scaling bottlenecks)
 - good design and quality of code including documentation
 - ready to deploy to production (if additional work is needed, please specify it)
 
-It is okay to make tradeoffs or to simplify the solution as long as you leave a note describing
-your thought process.
-Your solution should be delivered as a private git repository on http://bitbucket.org. Create a pull Request from any branch to master. Grant read access to your repository to allegrotech (our bitbucket user) and add this user as a
-reviewer to your Pull Request.
-
 # Project
 ### Requirements to run this project:
 - linux (tested on ubuntu) and 8080 unused port
@@ -169,7 +164,7 @@ Percentage of the requests served within a certain time (ms)
 
 # My steps to solve this project:
 1.Get knowledge about github api:
- - Created user token in order to server 5000 requests per hour from github api. It is a safer method than providing username and password with api url
+ - Created user token in order to serve 5000 requests per hour from github api. It is a safer method than providing username and password with api url
  - Example of querying github api and response: 
  
  ```
