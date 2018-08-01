@@ -10,6 +10,7 @@ func TestReversePolishNotationNumbers(t *testing.T) {
 	var input1 = "5 1 2 + 4 * + 3 -"
 	var input2 = "3 4 + 6 0 /"
 	var input3 = "5332493250324332523242324332513245"
+	var input4 = "493250324332523242324332513245"
 	c := make(chan app.RpnResultDto)
 	go app.ReversePolishNotation(input1,false,c)
 	r1 := <-c
@@ -20,6 +21,9 @@ func TestReversePolishNotationNumbers(t *testing.T) {
 	go app.ReversePolishNotation(input3,true,c)
 	r3 := <-c
 	CheckResult("14.000",r3,t)
+	go app.ReversePolishNotation(input4,true,c)
+	r4 := <-c
+	CheckResult(app.ErrorNotEnoughNumbers,r4,t)
 }
 
 func CheckResult(expectedValue string, r app.RpnResultDto, t *testing.T) {

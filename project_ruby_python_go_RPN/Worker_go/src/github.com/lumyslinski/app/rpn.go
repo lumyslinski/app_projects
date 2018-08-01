@@ -21,7 +21,6 @@ func (s *Stack) Pop()   float64  {
 	return d
 }
 
-
 type RpnResultDto struct {
 	ResultValue string
 	ResultTime  string
@@ -29,6 +28,7 @@ type RpnResultDto struct {
 
 const ErrorConvertingOperand = "Error while converting number from ascii code"
 const ErrorDividingZero 	 = "Can not divide by 0"
+const ErrorNotEnoughNumbers	 = "Can not calculate because there is not enough numbers"
 
 func ReversePolishNotation(inputData string, isInputConvertedToASCII bool, c chan RpnResultDto) {
 	start := time.Now()
@@ -41,6 +41,9 @@ func ReversePolishNotation(inputData string, isInputConvertedToASCII bool, c cha
 	var stackOperand Stack
 	var errorMessage = ""
 	for _,splittedElement := range splitted {
+		if len(splitted) <= 0 {
+			continue
+		}
 		var characterCode  = '!'
 		var characterValue int
 		if isInputConvertedToASCII {
@@ -69,16 +72,33 @@ func ReversePolishNotation(inputData string, isInputConvertedToASCII bool, c cha
 		} else {
 			var operator = characterValue
 			var operand  = 0.0
-			var operand2 = stackOperand.Pop()
-			var operand1 = stackOperand.Pop()
-			switch operator {
-				case 42: operand = operand1 * operand2
-				case 43: operand = operand1 + operand2
-				case 45: operand = operand1 - operand2
-				case 94: operand = math.Pow(operand1,operand2)
-				case 47,92: if operand2 != 0 { operand = operand1 / operand2 } else { errorMessage = ErrorDividingZero }
+			if !stackOperand.Empty() {
+				var operand2= stackOperand.Pop()
+				if !stackOperand.Empty() {
+					var operand1= stackOperand.Pop()
+					switch operator {
+					case 42:
+						operand = operand1 * operand2
+					case 43:
+						operand = operand1 + operand2
+					case 45:
+						operand = operand1 - operand2
+					case 94:
+						operand = math.Pow(operand1, operand2)
+					case 47, 92:
+						if operand2 != 0 {
+							operand = operand1 / operand2
+						} else {
+							errorMessage = ErrorDividingZero
+						}
+					}
+					stackOperand.Put(operand)
+				} else {
+					errorMessage = ErrorNotEnoughNumbers
+				}
+			} else {
+				errorMessage = ErrorNotEnoughNumbers
 			}
-			stackOperand.Put(operand)
 		}
 	}
 	var elapsedSeconds = time.Since(start).Seconds()
@@ -87,7 +107,13 @@ func ReversePolishNotation(inputData string, isInputConvertedToASCII bool, c cha
 	if len(errorMessage) > 0 {
 		result = RpnResultDto{ResultValue:errorMessage, ResultTime:elapsedTime}
 	} else {
-		result = RpnResultDto{ResultValue:fmt.Sprintf("%.3f",stackOperand.Pop()), ResultTime:elapsedTime}
+		var resultCalculation = ""
+		if !stackOperand.Empty() {
+			resultCalculation = fmt.Sprintf("%.3f", stackOperand.Pop())
+		} else {
+			resultCalculation = ErrorNotEnoughNumbers
+		}
+		result = RpnResultDto{ResultValue: resultCalculation, ResultTime: elapsedTime}
 	}
 	c <- result
 }

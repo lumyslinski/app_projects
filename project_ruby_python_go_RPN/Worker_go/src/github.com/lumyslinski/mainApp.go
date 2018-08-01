@@ -33,8 +33,8 @@ func main() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 	broker 			:= "127.0.0.1"
-	channel         := make(chan app.RpnResultDto)
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
+	channelRpn      := make(chan app.RpnResultDto)
+	consumer, err    := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":               broker,
 		"group.id":                        "rpn_group",
 		"session.timeout.ms":              6000,
@@ -47,8 +47,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("[Consumer] Created Consumer %v\n", c)
-	err = c.SubscribeTopics([]string { "request" }, nil)
+	fmt.Printf("[Consumer] Created Consumer %v\n", consumer)
+	err = consumer.SubscribeTopics([]string {"request" }, nil)
 
 	run := true
 	for run == true {
@@ -56,19 +56,19 @@ func main() {
 		case sig := <-sigchan:
 			fmt.Printf("[Consumer] Caught signal %v: terminating\n", sig)
 			run = false
-		case ev := <-c.Events():
+		case ev := <-consumer.Events():
 			switch e := ev.(type) {
 			case kafka.AssignedPartitions:
 				fmt.Fprintf(os.Stderr, "[Consumer] %% %v\n", e)
-				c.Assign(e.Partitions)
+				consumer.Assign(e.Partitions)
 			case kafka.RevokedPartitions:
 				fmt.Fprintf(os.Stderr, "[Consumer] %% %v\n", e)
-				c.Unassign()
+				consumer.Unassign()
 			case *kafka.Message:
 				var messageString = string(e.Value)
 				fmt.Printf("[Consumer] %% Message on %s:%s\n",e.TopicPartition, messageString)
-				go app.ReversePolishNotation(messageString,true,channel)
-				WriteCacheHash(messageString,<-channel)
+				go app.ReversePolishNotation(messageString,true,channelRpn)
+				WriteCacheHash(messageString,<-channelRpn)
 			case kafka.PartitionEOF:
 				fmt.Printf("[Consumer] %% Reached %v\n", e)
 			case kafka.Error:
@@ -79,7 +79,7 @@ func main() {
 	}
 
 	fmt.Printf("[Consumer] Closing consumer\n")
-	c.Close()
+	consumer.Close()
 }
 
 func WriteCacheHash(message string,result app.RpnResultDto) {
