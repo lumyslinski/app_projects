@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"math"
 	"time"
-)
+	)
 
 type Stack struct{ data []float64 }
 
@@ -30,20 +30,41 @@ type RpnResultDto struct {
 const ErrorConvertingOperand = "Error while converting number from ascii code"
 const ErrorDividingZero 	 = "Can not divide by 0"
 
-func ReversePolishNotation(inputData string, c chan RpnResultDto) {
+func ReversePolishNotation(inputData string, isInputConvertedToASCII bool, c chan RpnResultDto) {
 	start := time.Now()
-	var splitted = strings.Split(inputData," ")
+	var splitted []string
+	if isInputConvertedToASCII {
+		splitted = strings.Split(inputData,"32")
+	} else {
+		splitted = strings.Split(inputData," ")
+	}
 	var stackOperand Stack
 	var errorMessage = ""
-	for i:=0;i< len(splitted);i++ {
-		var characterCode  = ([]rune(splitted[i]))[0]
-		var characterValue = int(characterCode)
+	for _,splittedElement := range splitted {
+		var characterCode  = '!'
+		var characterValue int
+		if isInputConvertedToASCII {
+			characterValue, _ = strconv.Atoi(splittedElement)
+			characterCode     = rune(characterValue)
+		} else {
+			characterCode     = ([]rune(splittedElement))[0]
+			characterValue    = int(characterCode)
+		}
+		if characterCode == '!' {
+			continue
+		}
 		if unicode.IsDigit(characterCode) {
-			valueFromAscii, err := strconv.Atoi(splitted[i])
-			if err == nil {
+			var valueFromAscii int
+			var valueFromAsciiError error
+			if isInputConvertedToASCII {
+				valueFromAscii, valueFromAsciiError = strconv.Atoi(string(characterCode))
+			} else {
+				valueFromAscii, valueFromAsciiError = strconv.Atoi(splittedElement)
+			}
+			if valueFromAsciiError == nil {
 				stackOperand.Put(float64(valueFromAscii))
 			} else {
-				errorMessage = ErrorConvertingOperand
+				errorMessage = fmt.Sprintf("%s, error: %s [char:%s]",ErrorConvertingOperand,valueFromAsciiError,splittedElement)
 			}
 		} else {
 			var operator = characterValue
