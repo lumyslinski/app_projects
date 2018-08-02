@@ -35,8 +35,10 @@ class FileCacheLoader(threading.Thread):
             filePath = dir + '/../../CacheResults/' + fileName
             with open(filePath, 'r') as resultFile:
                 rpnResult = resultFile.read()
+        except FileNotFoundError:
+            pass
         except:
-            sys.stderr.write("[FileCacheLoader] Can not load a file [%s]: %s \n".format(filePath, sys.exc_info()[0]))
+            sys.stderr.write("Error: %s" % sys.exc_info()[0])
         return rpnResult
 
 

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
-from ProducerKafka import ProducerKafka
+from ApiController import ApiController
 
 url = '/rpn/<string:requestData>'
 
@@ -12,4 +12,4 @@ class SimpleText(Resource):
 app = Flask(__name__)
 api = Api(app)
 api.add_resource(SimpleText, '/')
-api.add_resource(ProducerKafka, url)
+api.add_resource(ApiController, url)

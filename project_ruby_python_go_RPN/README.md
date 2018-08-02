@@ -68,4 +68,5 @@ Output:
         - wrote test functions in Python and GO
     - start writting a communication bridge between Python and GO:
         - first step is to make an communication test with the cache function
-        - next step is to implement a rest api that will firstly read a result from cache directory. If there is no file then application will send a producer request to kafka to process RPN and write result into cached file which rest api will read 
+        - next step is to implement a rest api that will firstly read a result from cache directory. If there is no file then application will send a producer request to kafka to process RPN and write result into cached file which rest api will read
+        - test communication flow with various data

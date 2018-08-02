@@ -13,6 +13,15 @@ class HashTestClass(unittest.TestCase):
             hashResult += str(code)
         self.assertTrue(hashResult, "5332493250324332523242324332513245")
 
+    def test_unHashMethod(self):
+        input = "5332493250324332523242324332513245"
+        splittedInput = input.split("32")
+        unHashResult = ""
+        for elem in splittedInput:
+            code = chr(int(elem))
+            unHashResult += "%s " % code
+        self.assertTrue(unHashResult, "5 1 2 + 4 * + 3 -")
+
     def test_readCache(self):
         rpnResult = "-1"
         try:
