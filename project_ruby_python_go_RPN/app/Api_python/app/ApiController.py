@@ -5,9 +5,9 @@ from Logger import Logger
 
 class ApiController(Resource):
 
-    def get(self, requestData):
-        response = self.getRPNresult(requestData)
-        logger = Logger(requestData, response)
+    def get(self, requestHashedData):
+        response = self.getRPNresult(requestHashedData)
+        logger = Logger(requestHashedData, response)
         logger.start()
         return response
 

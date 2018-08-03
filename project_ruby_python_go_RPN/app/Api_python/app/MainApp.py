@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api
 from ApiController import ApiController
 
-url = '/rpn/<string:requestData>'
+url = '/rpn/<string:requestHashedData>'
 
 class SimpleText(Resource):
     def get(self):
@@ -11,5 +11,5 @@ class SimpleText(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(SimpleText, '/')
+api.add_resource(SimpleText, '/', '/rpn')
 api.add_resource(ApiController, url)

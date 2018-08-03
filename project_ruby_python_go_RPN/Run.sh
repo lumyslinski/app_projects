@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gnome-terminal -x bash ./RunApi.sh & sleep 5
-gnome-terminal -x bash ./RunEndpoint.sh & sleep 5
-gnome-terminal -x bash ./RunWorker.sh & sleep 5
-gnome-terminal -x bash ./RunTests.sh
+gnome-terminal -x bash ./RunApp.sh & sleep 5
+gnome-terminal -x bash ./RunTests.sh  & sleep 5
+gnome-terminal -x bash ./RunLogs.sh  & sleep 5
+gnome-terminal -x bash ./RunEndpoint.sh

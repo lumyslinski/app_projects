@@ -87,7 +87,7 @@ func WriteCacheHash(message string,result app.RpnResultDto) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var filePath = dir+"/CacheResults/"+message
+	var filePath = dir+"/../../../../../CacheResults/"+message
 	file, err := os.Create(filePath)
 	if err != nil {
 		fmt.Println(err)

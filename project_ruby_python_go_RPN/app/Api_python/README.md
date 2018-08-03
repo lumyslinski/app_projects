@@ -1,2 +1,0 @@
-Requirements:
-- confluent-kafka

@@ -7,14 +7,14 @@ class Rpn
   end
 
   def getApiResult(calculation)
-    url = "http://0.0.0.0:9999/rpn/" + hash(calculation)
+    url = "http://127.0.0.1:8080/rpn/" + hash(calculation)
     uri = URI(url)
     return Net::HTTP.get(uri).gsub!(/^\"|\"?$/, '')
   end
 
   def load(path)
     calculations = []
-    File.open(path.realpath) do |file|
+    File.open(path) do |file|
       file.each do |line|
         r = line.gsub(/\n/, '')
         calculations.push(r)
