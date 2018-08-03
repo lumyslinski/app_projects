@@ -32,7 +32,7 @@ class FileCacheLoader(threading.Thread):
         filePath = ""
         try:
             dir = os.path.dirname(os.path.abspath(__file__))
-            filePath = dir + '/../../CacheResults/' + fileName
+            filePath = dir + '/../../../CacheResults/' + fileName
             with open(filePath, 'r') as resultFile:
                 rpnResult = resultFile.read()
         except FileNotFoundError:

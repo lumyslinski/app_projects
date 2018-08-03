@@ -70,3 +70,8 @@ Output:
         - first step is to make an communication test with the cache function
         - next step is to implement a rest api that will firstly read a result from cache directory. If there is no file then application will send a producer request to kafka to process RPN and write result into cached file which rest api will read
         - test communication flow with various data
+    - start writting an interface endpoint in ruby (most difficult to setup environment and ide because of errors):
+        - console app was chosen to load files with data and process it to rest api in python
+        - start coding classes and tests
+        - test whole communication of the system
+    - start building a docker to run everything

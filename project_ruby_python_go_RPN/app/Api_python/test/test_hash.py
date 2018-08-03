@@ -26,7 +26,7 @@ class HashTestClass(unittest.TestCase):
         rpnResult = "-1"
         try:
             dir = os.path.dirname(os.path.abspath(__file__))
-            with open(dir + '/../../CacheResults/5332493250324332523242324332513245.test', 'r') as resultFile:
+            with open(dir + '/../../../CacheResults/5332493250324332523242324332513245.test', 'r') as resultFile:
                 rpnResult = resultFile.read()
         except:
             self.fail(sys.exc_info()[0])

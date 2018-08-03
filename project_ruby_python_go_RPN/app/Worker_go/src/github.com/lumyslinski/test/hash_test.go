@@ -31,7 +31,7 @@ func TestWriteCacheHash(t *testing.T) {
 	}
 	fmt.Println(dir)
 
-	file, err := os.Create(dir+"/../../../../../CacheResults/5332493250324332523242324332513245.test")
+	file, err := os.Create(dir+"/../../../../../../CacheResults/5332493250324332523242324332513245.test")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

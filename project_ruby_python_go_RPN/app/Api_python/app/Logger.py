@@ -22,7 +22,7 @@ class Logger(threading.Thread):
     def run(self):
         self.unHash()
         dir = os.path.dirname(os.path.abspath(__file__))
-        filePath = dir + '/../../Logs/log.txt'
+        filePath = dir + '/../../../Logs/log.txt'
         dataToWrite = "{0}: request[{1}] response[{2}] \n".format(str(datetime.now()), self.dataRequest, self.dataResponse)
         with open(filePath, 'a') as f:
             f.write(dataToWrite)
