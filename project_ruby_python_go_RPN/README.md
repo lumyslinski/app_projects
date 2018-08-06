@@ -164,7 +164,7 @@ Reading: 0 Writing: 1 Waiting: 0
 2. Start implementing worker in GO
     - write a RPN algorithm
     - write tests
-    - write [http queue worker](http://nesv.github.io/golang/2014/02/25/worker-queues-in-go.html)
+    - <del>write [http queue worker](http://nesv.github.io/golang/2014/02/25/worker-queues-in-go.html)</del>
 
 3. Start implementing communication layer:
     - dive deep into Apache Kafka (distributed streaming platform) which has got many clients for many languages including ruby, python and GO and is elastic, highly scalable, fault-tolerant on mac,linux,windows
@@ -192,5 +192,5 @@ Reading: 0 Writing: 1 Waiting: 0
     - start building a docker to run everything
         - start rest api in python
         - add everything to start worker go when system starts
-        - run ruby endpoint interface???
+        - run ruby endpoint interface
     - modify architecture diagram with new changes
