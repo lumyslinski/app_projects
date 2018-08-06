@@ -18,4 +18,5 @@ curl "http://127.0.0.1:8080/nginx_status"
 echo 'Stress test finished. Running chrome to test api in 10 seconds'
 sleep 10
 google-chrome "http://127.0.0.1:8080/"
+echo 'Output of logs (docker exec -it alpine_rpn tail -f /home/Logs/log.txt)'
 docker exec -it alpine_rpn tail -f /home/Logs/log.txt

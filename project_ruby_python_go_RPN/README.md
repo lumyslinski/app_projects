@@ -48,15 +48,48 @@ Output:
 
 ### Structure:
 - **Api_python**: rest api that serves a method rpn/<string:requestHashedData>, requestHashedData is a string with ascii codes for each input character
+    - app:
+        - ApiController.py: it is a class controller for a GET method in api
+        - FileCacheLoader.py: it is a multithreaded cache file loader
+        - Logger.py: it a class for logging data
+        - MainApp.py: it is an implementation of flask server that starts rest api
+        - ProducerKafka.py: it is an implementation of producer in Apache Kafka
+        - Wsgi.py: it is a code for starting flask server from uWsgi server
+    - conf:
+        - nginx.conf: it is a configuration file for nginx
+        - requirements.txt: it is a configuration file for installing python packages when docker starts
+        - supervisord.conf: it is a configuration file for app that starts all servers when linux is starting up in docker
+        - wsgi.ini: it is a configuration file for uWsgi server
+    - test:
+        - unitTestHash.py: it is a unit test for testing hash functions
+        - unitTestLocalRestApi.py: it is a unit test for testing rest api locally
 ```
- example: http://127.0.0.1:8080/rpn/5332493250324332523242324332513245
- 5332493250324332523242324332513245 is a hash for 5 1 2 + 4 * + 3 -
+ Example:
+  
+ REQUEST: http://127.0.0.1:8080/rpn/5332493250324332523242324332513245
+ (5332493250324332523242324332513245 is a hash for 5 1 2 + 4 * + 3 -)
+ 
+ RESPONSE: "14.000, 0.000004"
 ```
 - **Endpoint_ruby**: is an interface endpoint in Ruby which loads a file text with calculations (more in About). You can pass argument with full path of input data to main.rb 
 ```
-/usr/bin/ruby "/app/Endpoint_ruby/app/main.rb" <filePathWithInputData>
-```
+Example:
+
+REQUEST: /usr/bin/ruby /lumyslinski/app_projects/project_ruby_python_go_RPN/app/Endpoint_ruby/app/main.rb
+Missing argument file path for calculation file! Loading default file default.txt
+
+RESPONSE: 
+7.000, 0.000003
+14.000, 0.000004
+``` 
 - **Worker_go**: is a worker in GO to resolve RPN method via Apache Kafka. It writes result to cache, so the rest api will load firstly cached data and then try to call worker via Kafka
+    - *confluentinc* is a client in GO for Apache Kafka
+    - *lumyslinski* is a container for the RPN worker
+        - *app* is a directory for application
+            - *rpn.go* is a rpn worker
+        - *kafkatest* is a directory for tests of producer and consumer in Apache Kafka
+        - *test* is a test directory
+            - *main.App.go* is a file for testing application
 - **Dockerfile**: file for running in docker
 - **Logs**: logs directory with log.text file for requests and responses
 - **CacheResults**: cache directory for cached requests and responses
@@ -64,12 +97,14 @@ Output:
 - **RunApp.sh**: it runs app in docker
 - **RunEndpoint.sh**: it runs endpoint with default file
 - **RunTests.sh**: script with tests and loading log file
-
+ 
 # Tests
 There are two types of tests in this project:
 1. Unit test to check working functionality in specified languages
 2. Stress test to check 20 multiple requests at one time. I used ab (Apache HTTP server benchmarking tool)
 ```
+ab -n 50 -c 20 http://127.0.0.1:8080/rpn/5332493250324332523242324332513245
+
 Benchmarking 127.0.0.1 (be patient).....done
 
 Server Software:        nginx/1.14.0
