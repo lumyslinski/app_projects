@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
+using WebAnalyzer.Contracts;
 
 namespace WebAnalyzer.Concrete
 {
     public class AnalyzerProccessResultModel
     {
-        public List<AnalyzerItemResultModel> FoundKeywords { get; set; }
+        public List<IAnalyzerResultModel> FoundKeywords { get; set; }
         public string Error { get; set; }
 
         public override string ToString()

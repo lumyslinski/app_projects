@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using WebAnalyzer.Concrete;
+using WebAnalyzer.Contracts;
 
-namespace WebAnalyzer.Core
+namespace WebAnalyzer.Concrete
 {
     public class AnalyzerProccessor
     {
         public const string MetaKeywordsTag = "meta name=\"keywords\" content=\"";
-        List<AnalyzerItemResultModel> result;
+        List<IAnalyzerResultModel> result;
 
         public AnalyzerProccessor()
         {
-            result = new List<AnalyzerItemResultModel>();
+            result = new List<IAnalyzerResultModel>();
         }
 
         public AnalyzerProccessResultModel Proccess(string html)
@@ -33,7 +30,7 @@ namespace WebAnalyzer.Core
             return result;
         }
 
-        private List<AnalyzerItemResultModel> GetResult(int foundIndex, string pageData)
+        private List<IAnalyzerResultModel> GetResult(int foundIndex, string pageData)
         {
             string foundString = pageData.Substring(foundIndex + MetaKeywordsTag.Length);
             StringBuilder foundKeyWord = new StringBuilder();
@@ -43,7 +40,8 @@ namespace WebAnalyzer.Core
                 switch (c)
                 {
                     case ',': Add(foundKeyWord); foundKeyWord.Clear(); break;
-                    case '>': Add(foundKeyWord); // add last found keyword
+                    case '>':
+                        Add(foundKeyWord); // add last found keyword
                         // we have to break the loop somehow
                         i = foundString.Length + 1;
                         break;

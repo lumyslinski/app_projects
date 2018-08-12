@@ -11,6 +11,4 @@ namespace WebAnalyzer.Contracts
         string Keyword { get; set; }
         int Occurrence { get; set; }
     }
-
-    
 }

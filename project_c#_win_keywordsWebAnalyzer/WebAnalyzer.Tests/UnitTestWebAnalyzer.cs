@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebAnalyzer.Core;
+using WebAnalyzer.Concrete;
 
 namespace WebAnalyzer.Tests
 {

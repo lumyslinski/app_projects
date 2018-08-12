@@ -7,19 +7,12 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using WebAnalyzer.Concrete;
 using WebAnalyzer.Contracts;
-using WebAnalyzer.Core;
 
 namespace WebAnalyzer.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class AnalyzerViewModel : ViewModelBase
     {
-        private ObservableCollection<AnalyzerItemResultModel> foundKeywords;
+        private ObservableCollection<IAnalyzerResultModel> foundKeywords;
         private string status;
         private string typedUrl;
         private bool isNotProccessing;
@@ -36,7 +29,7 @@ namespace WebAnalyzer.ViewModel
             set { typedUrl = value; RaisePropertyChanged(); }
         }
 
-        public ObservableCollection<AnalyzerItemResultModel> FoundKeywords
+        public ObservableCollection<IAnalyzerResultModel> FoundKeywords
         {
             get { return foundKeywords; }
             set { foundKeywords = value; RaisePropertyChanged(); Status = string.Format("Found {0} keywords",foundKeywords.Count); }
@@ -55,7 +48,7 @@ namespace WebAnalyzer.ViewModel
         /// </summary>
         public AnalyzerViewModel()
         {
-            foundKeywords = new ObservableCollection<AnalyzerItemResultModel>();
+            foundKeywords = new ObservableCollection<IAnalyzerResultModel>();
             status = "Type url in order to find occurences of found keywords from meta tag of the page's content";
             isNotProccessing = true;
             AnalyzeUrlCommand = new RelayCommand(AnalyzeUrl);
@@ -77,7 +70,7 @@ namespace WebAnalyzer.ViewModel
                         }
                         else
                         {
-                            InvokeOnDispatcher(new Action(() => { FoundKeywords = new ObservableCollection<AnalyzerItemResultModel>(resultTask.Result.FoundKeywords); }));
+                            InvokeOnDispatcher(new Action(() => { FoundKeywords = new ObservableCollection<IAnalyzerResultModel>(resultTask.Result.FoundKeywords); }));
                         }
                     }
                 }, TaskContinuationOptions.NotOnFaulted | TaskContinuationOptions.NotOnCanceled).ContinueWith( (t) => {
