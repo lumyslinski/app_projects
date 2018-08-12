@@ -20,16 +20,16 @@
 
 
     <StackPanel IsEnabled="{Binding IsNotProccessing}">
-            <DockPanel Height="50">
+            <DockPanel Height="25">
                 <Label Content="Type url" VerticalAlignment="Center" />
-                <TextBox DockPanel.Dock="Left" TextWrapping="Wrap" Text="{Binding TypedUrl}" Width="430" Height="50" Margin="0,0,5,0"/>
+                <TextBox DockPanel.Dock="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" TextWrapping="Wrap" Text="{Binding TypedUrl}" Width="430" Height="25" Margin="0,0,5,0"/>
                 <Button DockPanel.Dock="Right" Command="{Binding AnalyzeUrlCommand}" Content="Analyze keywords" HorizontalAlignment="Left" Width="100"/>
             </DockPanel>
             <DockPanel>
                 <Label DockPanel.Dock="Left" Content="Status:" />
             <Label DockPanel.Dock="Right" Content="{Binding Status}" />
             </DockPanel>
-            <ListView ItemsSource="{Binding FoundKeywords}">
+            <ListView ItemsSource="{Binding FoundKeywords}" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Keyword" Width="480" DisplayMemberBinding="{Binding Keyword}" />

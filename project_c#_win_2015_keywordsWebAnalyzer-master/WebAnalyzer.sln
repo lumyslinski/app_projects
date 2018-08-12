@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40418.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAnalyzer", "WebAnalyzer\WebAnalyzer.csproj", "{983DC2E0-5182-469C-821F-A117612A2B56}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAnalyzer.Concrete", "WebAnalyzer.Concrete\WebAnalyzer.Concrete.csproj", "{55B20F9F-F755-4495-900C-6CC941C80A80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAnalyzer.Core", "WebAnalyzer.Core\WebAnalyzer.Core.csproj", "{B5D83AA6-6809-4CCD-8AF5-D294EF64FDC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAnalyzer.Tests", "WebAnalyzer.Tests\WebAnalyzer.Tests.csproj", "{7516ACF7-3FFB-4277-9155-1EBE9310CDEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{B5D83AA6-6809-4CCD-8AF5-D294EF64FDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5D83AA6-6809-4CCD-8AF5-D294EF64FDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5D83AA6-6809-4CCD-8AF5-D294EF64FDC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7516ACF7-3FFB-4277-9155-1EBE9310CDEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7516ACF7-3FFB-4277-9155-1EBE9310CDEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7516ACF7-3FFB-4277-9155-1EBE9310CDEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7516ACF7-3FFB-4277-9155-1EBE9310CDEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95C21449-65BE-42A0-8E25-3AAF2A77AF95}
 	EndGlobalSection
 EndGlobal

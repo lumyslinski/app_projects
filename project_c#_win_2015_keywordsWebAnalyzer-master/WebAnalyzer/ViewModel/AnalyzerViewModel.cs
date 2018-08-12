@@ -19,7 +19,7 @@ namespace WebAnalyzer.ViewModel
     /// </summary>
     public class AnalyzerViewModel : ViewModelBase
     {
-        private ObservableCollection<AnalyzerResultModel> foundKeywords;
+        private ObservableCollection<AnalyzerItemResultModel> foundKeywords;
         private string status;
         private string typedUrl;
         private bool isNotProccessing;
@@ -36,7 +36,7 @@ namespace WebAnalyzer.ViewModel
             set { typedUrl = value; RaisePropertyChanged(); }
         }
 
-        public ObservableCollection<AnalyzerResultModel> FoundKeywords
+        public ObservableCollection<AnalyzerItemResultModel> FoundKeywords
         {
             get { return foundKeywords; }
             set { foundKeywords = value; RaisePropertyChanged(); Status = string.Format("Found {0} keywords",foundKeywords.Count); }
@@ -55,10 +55,10 @@ namespace WebAnalyzer.ViewModel
         /// </summary>
         public AnalyzerViewModel()
         {
-            FoundKeywords = new ObservableCollection<AnalyzerResultModel>();
-            Status = "Type url in order to find occurences of found keywords from meta tag of the page's content";
+            foundKeywords = new ObservableCollection<AnalyzerItemResultModel>();
+            status = "Type url in order to find occurences of found keywords from meta tag of the page's content";
+            isNotProccessing = true;
             AnalyzeUrlCommand = new RelayCommand(AnalyzeUrl);
-            IsNotProccessing = true;
         }
 
         private void AnalyzeUrl()
@@ -77,7 +77,7 @@ namespace WebAnalyzer.ViewModel
                         }
                         else
                         {
-                            InvokeOnDispatcher(new Action(() => { FoundKeywords = new ObservableCollection<AnalyzerResultModel>(resultTask.Result.FoundKeywords); }));
+                            InvokeOnDispatcher(new Action(() => { FoundKeywords = new ObservableCollection<AnalyzerItemResultModel>(resultTask.Result.FoundKeywords); }));
                         }
                     }
                 }, TaskContinuationOptions.NotOnFaulted | TaskContinuationOptions.NotOnCanceled).ContinueWith( (t) => {

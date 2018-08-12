@@ -28,7 +28,6 @@ namespace WebAnalyzer.ViewModel
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            SimpleIoc.Default.Register<IModalBox, ModalBoxViewModel>();
             SimpleIoc.Default.Register<AnalyzerViewModel>();
         }
 

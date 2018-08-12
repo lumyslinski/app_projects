@@ -13,16 +13,16 @@ namespace WebAnalyzer.Core
     {
         public static bool IsValidUrl(string url)
         {
-            if (String.IsNullOrEmpty(url) && !url.Contains("http://") || !url.Contains("https://"))
+            if (!String.IsNullOrEmpty(url) && (url.Contains("http://") || url.Contains("https://")))
             {
                 return true;
             }
             return false;
         }
 
-        public static async Task<AnalyzerResultExceptionModel> GetFoundKeywords(string url)
+        public static async Task<AnalyzerProccessResultModel> GetFoundKeywords(string url)
         {
-            AnalyzerResultExceptionModel result = new AnalyzerResultExceptionModel();
+            AnalyzerProccessResultModel result = new AnalyzerProccessResultModel();
             try
             {
                 WebClient wc = new WebClient();
@@ -31,15 +31,7 @@ namespace WebAnalyzer.Core
                 if (String.IsNullOrEmpty(pageData)) result.Error = "Blank page";
                 else
                 {
-                    int foundIndex = pageData.IndexOf(AnalyzerProccessor.MetaKeywordsTag);
-                    if (foundIndex == -1)
-                    {
-                        result.Error = "Not found keywords meta tag!";
-                    }
-                    else
-                    {
-                        result.FoundKeywords = new AnalyzerProccessor().GetResult(foundIndex,pageData);
-                    }
+                    result = new AnalyzerProccessor().Proccess(pageData);
                 }
             }
             catch (Exception exp)

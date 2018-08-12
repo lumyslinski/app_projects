@@ -39,8 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerResultExceptionModel.cs" />
-    <Compile Include="AnalyzerResultModel.cs" />
+    <Compile Include="AnalyzerProccessResultModel.cs" />
+    <Compile Include="AnalyzerItemResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

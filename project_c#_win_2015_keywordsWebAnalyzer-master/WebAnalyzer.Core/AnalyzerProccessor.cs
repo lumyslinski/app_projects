@@ -11,14 +11,29 @@ namespace WebAnalyzer.Core
     public class AnalyzerProccessor
     {
         public const string MetaKeywordsTag = "meta name=\"keywords\" content=\"";
-        List<AnalyzerResultModel> result;
+        List<AnalyzerItemResultModel> result;
 
         public AnalyzerProccessor()
         {
-            result = new List<AnalyzerResultModel>();
+            result = new List<AnalyzerItemResultModel>();
         }
 
-        public List<AnalyzerResultModel> GetResult(int foundIndex, string pageData)
+        public AnalyzerProccessResultModel Proccess(string html)
+        {
+            AnalyzerProccessResultModel result = new AnalyzerProccessResultModel();
+            int foundIndex = html.IndexOf(AnalyzerProccessor.MetaKeywordsTag);
+            if (foundIndex == -1)
+            {
+                result.Error = "Not found keywords meta tag!";
+            }
+            else
+            {
+                result.FoundKeywords = GetResult(foundIndex, html);
+            }
+            return result;
+        }
+
+        private List<AnalyzerItemResultModel> GetResult(int foundIndex, string pageData)
         {
             string foundString = pageData.Substring(foundIndex + MetaKeywordsTag.Length);
             StringBuilder foundKeyWord = new StringBuilder();
@@ -50,7 +65,7 @@ namespace WebAnalyzer.Core
 
         private void Add(StringBuilder foundKeyWord)
         {
-            result.Add(new AnalyzerResultModel() { Keyword = foundKeyWord.ToString() });
+            result.Add(new AnalyzerItemResultModel() { Keyword = foundKeyWord.ToString() });
         }
     }
 }
