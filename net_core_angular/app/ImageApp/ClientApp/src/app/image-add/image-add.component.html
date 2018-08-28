@@ -1,0 +1,61 @@
+<div class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-multiline">
+        <div class="column is-6 is-offset-3">
+          <div class="upload-box">
+            <div class="upload-box-header">
+              <div class="header-title">
+                <h2>{{ message }}</h2>
+              </div>
+            </div>
+            <div class="upload-box-content">
+              <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                <p>
+                  Drag files here or
+                  <label class="upload-button">
+                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple> browse
+                  </label>
+                  to upload.
+                </p>
+              </div>
+              <div class="upload-item" *ngFor="let f of filesNotUploaded; let i = index;">
+                <div class="upload-item-content">
+                  <div class="filename">
+                    <i class="ionicon ion-ios-copy"></i>
+                    <span>{{ f?.name }}</span>
+                  </div>
+                  <div class="progress-content">
+                    <div class="progress">
+                      <span class="bar" [style.width]="f?.progress?.data?.percentage + '%'" [class.is-done]="f?.progress?.data?.percentage === 100"></span>
+                    </div>
+                  </div>
+                  <div class="progress-text-content">
+                    <span class="progress-text" [class.is-done]="f?.progress?.data?.percentage === 100">
+                      <span *ngIf="f.progress?.data?.percentage !== 100">Uploading...{{ f.progress?.data?.percentage }}%</span>
+                      <span *ngIf="f.progress?.data?.percentage === 100">Processing...</span>
+                    </span>
+                    <span class="speed-and-eta-text" *ngIf="f.progress?.data?.percentage !== 0 && f.progress?.data?.percentage !== 100">
+                      <span>{{ f.progress?.data?.speedHuman }} </span>
+                      <span>ETA {{ f.progress?.data?.etaHuman }}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="image-inline" *ngFor="let f of filesUploaded; let i = index;">
+                <div>
+                  <a href="{{ f?.response?.UrlSrc }}" data-lightbox="uploaded" title="{{ f?.name }}" attr.data-gvdetails="{{ f?.response?.GoogleVisionApiDetails }}">
+                    <img src="{{ f?.response?.UrlThumbSrc }}" alt="{{ f?.name }}"/>
+                  </a>
+                </div>
+                <div class="buttonDeleteContainer">
+                  <a class="buttonDelete" href="#" (click)="onDelete(f)">delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

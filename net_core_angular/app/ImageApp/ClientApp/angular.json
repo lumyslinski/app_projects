@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "sass"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -22,10 +26,18 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./src/styles/"
+              ]
+            },
             "styles": [
-              "src/styles.css"
+              "src/styles/app.sass",
+              "src/styles/style.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/lightbox-plus-jquery.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -72,7 +84,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles/app.sass"
             ],
             "scripts": [],
             "assets": [
