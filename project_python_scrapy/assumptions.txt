@@ -1,0 +1,20 @@
+# Assumptions and decisions report.
+Algorithm:
+1. Run spider on http://pstrial-2017-12-18.toscrape.com/browse/summertime
+2. Consume every page by next page, if there is no available then go to another category
+3. Repeat step 2 for
+   1. http://pstrial-2017-12-18.toscrape.com/browse/summertime
+   2. http://pstrial-2017-12-18.toscrape.com/browse/summertime/wrapperfrom/
+   3. http://pstrial-2017-12-18.toscrape.com/browse/summertime/wrapperfrom/
+
+Steps:
+1. Create item fields
+2. Create mechanism for urls
+3. Parse response
+    - get all links of items
+    - parse children elements of each link
+      - sometimes response is a child and sometimes is from root ?!
+      - deep dive into xpath
+4. I do not know where to find description and width/height of the work
+    - when I started analyzing specific details of the work item then I found description and dimensions
+    - are dimensions the width and height of the work? What about i.e "Dimensions 8 1/2 x 7 1/16 in. (21.59 x 17.94 cm) (plate) 14 3/16 x 10 7/8 in. (36.04 x 27.62 cm) (sheet)"

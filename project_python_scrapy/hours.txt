@@ -1,0 +1,3 @@
+08.08.2018 7h - learning scrapy (running tutorial, implemented basic images downloader)
+09.08.2018 2h - analyze problem, create simple project and start implementation
+10.08.2018 2.5h - some fixes and finishing, deployment learning
