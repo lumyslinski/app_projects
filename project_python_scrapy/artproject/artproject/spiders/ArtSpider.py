@@ -5,6 +5,7 @@ from scrapy.linkextractors import LinkExtractor
 
 
 class ArtSpider(scrapy.Spider):
+    emptyItemsTryCount = 0
     name = "art"
     baseUrl = "http://pstrial-2017-12-18.toscrape.com"
     categories = ['summertime', 'wrapperfrom', 'barnowl']
@@ -29,39 +30,46 @@ class ArtSpider(scrapy.Spider):
                 categoriesList.append(category)
 
         a_selectors = response.xpath('//a[contains(@href,"item")]')
-        for a in a_selectors:
-            item = ArtprojectItem()
-            item['url'] = self.baseUrl + a.xpath("@href").extract_first()
-            item['path'] = categoriesList
-            item['artist'] = []
-            artists = str(a.xpath("./div/h2/text()").extract())
-            artists = self.cleanArtist(artists).split(";")
-            for artist in artists:
-                if artist != "[]" and artist is not None:
-                    item['artist'].append(artist.strip('\\\n\t\r'))
-            item['title'] = a.xpath("./div/h1/text()").extract_first()
-            item['image'] = self.baseUrl + a.xpath("./img/@src").extract_first()
-            h = a.xpath("./img/@height").extract_first()
-            if h == None:
-                item['height'] = 0
-            else:
-                item['height'] = h
-            w = a.xpath("./img/@width").extract_first()
-            if w == None:
-                item['width'] = 0
-            else:
-                item['width'] = h
-            # description is propably in specific work item
-            if len(item['url']) > 0:
-                yield scrapy.Request(item['url'], callback=self.parse_specific_work_item_tags, meta={'item': item})
-            yield item
-        # follow next page links
-        next_page = response.xpath('//a[contains(text(),"Next")]/@href').extract()
-        if next_page & len(a_selectors) > 0:
-            next_href = next_page[0]
-            next_page_url = self.baseUrl + next_href
-            request = scrapy.Request(url=next_page_url, callback=self.parse)
-            yield request
+        if len(a_selectors) > 0:
+            for a in a_selectors:
+                item = ArtprojectItem()
+                item['url'] = self.baseUrl + a.xpath("@href").extract_first()
+                item['path'] = categoriesList
+                item['artist'] = []
+                artists = str(a.xpath("./div/h2/text()").extract())
+                artists = self.cleanArtist(artists).split(";")
+                for artist in artists:
+                    if artist != "[]" and artist is not None:
+                        item['artist'].append(artist.strip('\\\n\t\r'))
+                item['title'] = a.xpath("./div/h1/text()").extract_first()
+                item['image'] = self.baseUrl + a.xpath("./img/@src").extract_first()
+                h = a.xpath("./img/@height").extract_first()
+                if h == None:
+                    item['height'] = 0
+                else:
+                    item['height'] = h
+                w = a.xpath("./img/@width").extract_first()
+                if w == None:
+                    item['width'] = 0
+                else:
+                    item['width'] = h
+                # description is propably in specific work item
+                if len(item['url']) > 0:
+                    yield scrapy.Request(item['url'], callback=self.parse_specific_work_item_tags, meta={'item': item})
+                yield item
+        else:
+            #count how many times we do not have items on the page, if there is more than 3 then we will stop
+            self.emptyItemsTryCount += 1
+
+        if self.emptyItemsTryCount < 3:
+            # follow next page links
+            next_page = response.xpath('//a[contains(text(),"Next")]/@href').extract()
+            if next_page and len(a_selectors) > 0:
+                next_href = next_page[0]
+                next_page_url = self.baseUrl + next_href
+                request = scrapy.Request(url=next_page_url, callback=self.parse)
+                yield request
+
 
     def parse_specific_work_item_tags(self, response):
         item = response.meta['item']
