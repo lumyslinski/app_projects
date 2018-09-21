@@ -28,6 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\RestApp.Data\RestApp.Data.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <ItemGroup>

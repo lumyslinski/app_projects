@@ -11,13 +11,17 @@ namespace RestApp.Data.Models
         /// </summary>
         public string Error { get; set; }
         /// <summary>
+        /// Id of item
+        /// </summary>
+        public int ResultId { get; set; }
+        /// <summary>
         /// Result status, it could be a new generated id from db or 1 for ok. Otherwise it is -1
         /// </summary>
-        public int ResultStatus { get; set; }
+        public bool ResultIsOk => ResultId > 0;
 
         public CharacterServiceResult()
         {
-            this.ResultStatus = -1; // error code status by default
+            this.ResultId = -1; // error code status by default
         }
     }
 }

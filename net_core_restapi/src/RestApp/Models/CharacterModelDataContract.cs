@@ -40,7 +40,7 @@ namespace RestApp.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Episodes
+        /// Gets or Sets episodes
         /// </summary>
         [Required]
         [DataMember(Name="episodes")]
@@ -63,7 +63,7 @@ namespace RestApp.Models
             sb.Append("class CharacterItem {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  Episodes: ").Append(Episodes).Append("\n");
+            sb.Append("  episodes: ").Append(Episodes).Append("\n");
             sb.Append("  Friends: ").Append(Friends).Append("\n");
             sb.Append("}\n");
             return sb.ToString();

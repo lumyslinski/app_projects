@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RestApp.Data.Contracts;
 using RestApp.Data.Database;
 using RestApp.Data.Models;
@@ -34,13 +35,20 @@ namespace RestApp.Data.Repositories
 
         public IEnumerable<CharacterModelDatabase> Read()
         {
-            return dbContext.Characters.AsEnumerable();
+            var characters = dbContext.Characters.Include(e => e.Episodes).ThenInclude(ee => ee.Episode)
+                                                 .Include(f => f.Friends).AsEnumerable();
+            return characters;
         }
 
         public void Update(CharacterModelDatabase item)
         {
             dbContext.Characters.Update(item);
             dbContext.SaveChanges();
+        }
+
+        public CharacterModelDatabase GetItem(int id)
+        {
+            return dbContext.Characters.FirstOrDefault(c => c.Id == id);
         }
     }
 }

@@ -127,7 +127,7 @@
         </member>
         <member name="P:RestApp.Models.CharacterModelDataContract.Episodes">
             <summary>
-            Gets or Sets Episodes
+            Gets or Sets episodes
             </summary>
         </member>
         <member name="P:RestApp.Models.CharacterModelDataContract.Friends">

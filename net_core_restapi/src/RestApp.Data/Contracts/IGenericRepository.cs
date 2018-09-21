@@ -8,5 +8,6 @@ namespace RestApp.Data.Contracts
         IEnumerable<T> Read();
         void Update(T item);
         void Delete(int id);
+        T GetItem(int id);
     }
 }

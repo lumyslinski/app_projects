@@ -15,7 +15,7 @@ namespace RestApp.Data.Contracts
         string Name { get; set; }
 
         /// <summary>
-        /// Episodes
+        /// episodes
         /// </summary>
         List<string> Episodes { get; set; }
 

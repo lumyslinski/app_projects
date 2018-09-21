@@ -2,7 +2,8 @@
 
 namespace RestApp.Data.Contracts
 {
-    public interface ICharacterRepository: IGenericRepository<CharacterModelDatabase>
+    public interface ICharacterRepository : IGenericRepository<CharacterModelDatabase>
     {
+        
     }
 }

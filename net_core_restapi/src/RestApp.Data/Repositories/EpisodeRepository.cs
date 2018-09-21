@@ -17,10 +17,11 @@ namespace RestApp.Data.Repositories
             this.dbContext = dbContext;
         }
 
-        public void Create(EpisodeModelDatabase item)
+        public int Create(EpisodeModelDatabase item)
         {
             this.dbContext.Episodes.Add(item);
             dbContext.SaveChanges();
+            return item.Id;
         }
 
         public void Delete(int id)
@@ -42,6 +43,11 @@ namespace RestApp.Data.Repositories
         {
             dbContext.Episodes.Update(item);
             dbContext.SaveChanges();
+        }
+
+        public EpisodeModelDatabase GetItem(int id)
+        {
+            return dbContext.Episodes.FirstOrDefault(c => c.Id == id);
         }
     }
 }
