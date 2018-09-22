@@ -13,29 +13,13 @@ namespace RestApp.XUnitTests.Integration
 {
     public class IntegrationTestCharacterRepository
     {
-        private ApplicationDbContext GetApplicationDbContext()
-        {
-            try
-            {
-                var applicationDbContextDesignTimeDbContextFactory = new ApplicationDbContextDesignTimeDbContextFactory();
-                var dbContext = applicationDbContextDesignTimeDbContextFactory.Create();
-                dbContext.Database.EnsureDeleted();
-                dbContext.Database.EnsureCreated();
-                return dbContext;
-            }
-            catch (Exception exp)
-            {
-                throw exp;
-            }
-        }
-
         [Fact]
         public void UnitTestCharacterRepositoryRead()
         {
             IEnumerable<CharacterModelDatabase> readResult = null;
             try
             {
-                using (var dbContext = GetApplicationDbContext())
+                using (var dbContext = ApplicationDbContextContainer.GetInstance())
                 {
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
@@ -80,7 +64,7 @@ namespace RestApp.XUnitTests.Integration
         {
             try
             {
-                using (var dbContext = GetApplicationDbContext())
+                using (var dbContext = ApplicationDbContextContainer.GetInstance())
                 {
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
@@ -101,11 +85,11 @@ namespace RestApp.XUnitTests.Integration
         }
 
         [Fact]
-        public void UnitTestCharacterRepositoryUpdateName()
+        public void UnitTestCharacterRepositoryUpdateNameDelete()
         {
             try
             {
-                using (var dbContext = GetApplicationDbContext())
+                using (var dbContext = ApplicationDbContextContainer.GetInstance())
                 {
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
@@ -158,11 +142,11 @@ namespace RestApp.XUnitTests.Integration
          */
 
         [Fact]
-        public void UnitTestCharacterRepositoryUpdateEpisodesFriends_Scenario1()
+        public void UnitTestCharacterRepositoryUpdateDeleteEpisodesFriends_Scenario1()
         {
             try
             {
-                using (var dbContext = GetApplicationDbContext())
+                using (var dbContext = ApplicationDbContextContainer.GetInstance())
                 {
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);

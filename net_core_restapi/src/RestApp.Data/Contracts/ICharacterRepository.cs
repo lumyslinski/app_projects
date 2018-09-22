@@ -4,6 +4,7 @@ namespace RestApp.Data.Contracts
 {
     public interface ICharacterRepository : IGenericRepository<CharacterModelDatabase>
     {
-        
+        void DeleteCharacterEpisode(CharacterEpisodeModelDatabase item);
+        void DeleteCharacterFriend(CharacterFriendModelDatabase item);
     }
 }

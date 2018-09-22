@@ -55,6 +55,16 @@ namespace RestApp.Data.Repositories
             dbContext.SaveChanges();
         }
 
+        public void DeleteCharacterEpisode(CharacterEpisodeModelDatabase item)
+        {
+            dbContext.CharacterEpisodes.Remove(item);
+        }
+
+        public void DeleteCharacterFriend(CharacterFriendModelDatabase item)
+        {
+            dbContext.CharacterFriends.Remove(item);
+        }
+
         public CharacterModelDatabase GetItem(int id)
         {
             return dbContext.Characters.Include(e => e.Episodes).ThenInclude(ee => ee.Episode)

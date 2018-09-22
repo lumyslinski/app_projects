@@ -28,7 +28,7 @@ namespace RestApp.Data.Migrations
 
                     b.HasIndex("EpisodeId");
 
-                    b.ToTable("CharacterEpisodes");
+                    b.ToTable("CharacterEpisode");
 
                     b.HasData(
                         new { CharacterId = 1, EpisodeId = 1 },
@@ -63,7 +63,7 @@ namespace RestApp.Data.Migrations
 
                     b.HasIndex("FriendId");
 
-                    b.ToTable("CharacterFriends");
+                    b.ToTable("CharacterFriend");
 
                     b.HasData(
                         new { CharacterId = 1, FriendId = 3 },

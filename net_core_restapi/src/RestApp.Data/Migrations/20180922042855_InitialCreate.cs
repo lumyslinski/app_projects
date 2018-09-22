@@ -34,7 +34,7 @@ namespace RestApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharacterFriends",
+                name: "CharacterFriend",
                 columns: table => new
                 {
                     CharacterId = table.Column<int>(nullable: false),
@@ -42,15 +42,15 @@ namespace RestApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterFriends", x => new { x.CharacterId, x.FriendId });
+                    table.PrimaryKey("PK_CharacterFriend", x => new { x.CharacterId, x.FriendId });
                     table.ForeignKey(
-                        name: "FK_CharacterFriends_Character_CharacterId",
+                        name: "FK_CharacterFriend_Character_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Character",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CharacterFriends_Character_FriendId",
+                        name: "FK_CharacterFriend_Character_FriendId",
                         column: x => x.FriendId,
                         principalTable: "Character",
                         principalColumn: "Id",
@@ -58,7 +58,7 @@ namespace RestApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharacterEpisodes",
+                name: "CharacterEpisode",
                 columns: table => new
                 {
                     CharacterId = table.Column<int>(nullable: false),
@@ -66,15 +66,15 @@ namespace RestApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterEpisodes", x => new { x.CharacterId, x.EpisodeId });
+                    table.PrimaryKey("PK_CharacterEpisode", x => new { x.CharacterId, x.EpisodeId });
                     table.ForeignKey(
-                        name: "FK_CharacterEpisodes_Character_CharacterId",
+                        name: "FK_CharacterEpisode_Character_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Character",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CharacterEpisodes_Episode_EpisodeId",
+                        name: "FK_CharacterEpisode_Episode_EpisodeId",
                         column: x => x.EpisodeId,
                         principalTable: "Episode",
                         principalColumn: "Id",
@@ -106,7 +106,7 @@ namespace RestApp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "CharacterEpisodes",
+                table: "CharacterEpisode",
                 columns: new[] { "CharacterId", "EpisodeId" },
                 values: new object[,]
                 {
@@ -132,7 +132,7 @@ namespace RestApp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "CharacterFriends",
+                table: "CharacterFriend",
                 columns: new[] { "CharacterId", "FriendId" },
                 values: new object[,]
                 {
@@ -159,23 +159,23 @@ namespace RestApp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharacterEpisodes_EpisodeId",
-                table: "CharacterEpisodes",
+                name: "IX_CharacterEpisode_EpisodeId",
+                table: "CharacterEpisode",
                 column: "EpisodeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharacterFriends_FriendId",
-                table: "CharacterFriends",
+                name: "IX_CharacterFriend_FriendId",
+                table: "CharacterFriend",
                 column: "FriendId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CharacterEpisodes");
+                name: "CharacterEpisode");
 
             migrationBuilder.DropTable(
-                name: "CharacterFriends");
+                name: "CharacterFriend");
 
             migrationBuilder.DropTable(
                 name: "Episode");

@@ -43,7 +43,7 @@ namespace RestApp.Data.Database
             modelBuilder.Entity<CharacterModelDatabase>().Property(i => i.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<CharacterModelDatabase>().HasData(generator.GetCharacters());
 
-            modelBuilder.Entity<CharacterEpisodeModelDatabase>().ToTable("CharacterEpisodes");
+            modelBuilder.Entity<CharacterEpisodeModelDatabase>().ToTable("CharacterEpisode");
             modelBuilder.Entity<CharacterEpisodeModelDatabase>().HasKey(ce => new { ce.CharacterId, ce.EpisodeId });
             modelBuilder.Entity<CharacterEpisodeModelDatabase>().HasOne(ce => ce.Character).WithMany(c => c.Episodes).OnDelete(DeleteBehavior.Restrict);
             generator.AddCharacterEpisodes(1, 1, 2, 3); // Luke Skywalker
@@ -55,7 +55,7 @@ namespace RestApp.Data.Database
             generator.AddCharacterEpisodes(7, 1, 2, 3); // R2-D2
             modelBuilder.Entity<CharacterEpisodeModelDatabase>().HasData(generator.GetCharacterEpisodes());
 
-            modelBuilder.Entity<CharacterFriendModelDatabase>().ToTable("CharacterFriends");
+            modelBuilder.Entity<CharacterFriendModelDatabase>().ToTable("CharacterFriend");
             modelBuilder.Entity<CharacterFriendModelDatabase>().HasKey(cf => new { cf.CharacterId, cf.FriendId });
             modelBuilder.Entity<CharacterFriendModelDatabase>().HasOne(cf => cf.Character).WithMany(c => c.Friends).OnDelete(DeleteBehavior.Restrict);
             generator.AddCharacterFriends(1, 3, 4, 6, 7);  // Luke Skywalker
