@@ -28,6 +28,15 @@ namespace RestApp.Data.Repositories
             var foundToDelete = dbContext.Characters.FirstOrDefault(c => c.Id == id);
             if (foundToDelete != null)
             {
+                // firstly remove all references
+                foreach (var episode in foundToDelete.Episodes)
+                {
+                    dbContext.CharacterEpisodes.Remove(episode);
+                }
+                foreach (var friend in foundToDelete.Friends)
+                {
+                    dbContext.CharacterFriends.Remove(friend);
+                }
                 dbContext.Characters.Remove(foundToDelete);
                 dbContext.SaveChanges();
             }
@@ -36,7 +45,7 @@ namespace RestApp.Data.Repositories
         public IEnumerable<CharacterModelDatabase> Read()
         {
             var characters = dbContext.Characters.Include(e => e.Episodes).ThenInclude(ee => ee.Episode)
-                                                 .Include(f => f.Friends).AsEnumerable();
+                                                 .Include(f => f.Friends).ThenInclude(ff => ff.Friend).AsEnumerable();
             return characters;
         }
 
@@ -48,7 +57,8 @@ namespace RestApp.Data.Repositories
 
         public CharacterModelDatabase GetItem(int id)
         {
-            return dbContext.Characters.FirstOrDefault(c => c.Id == id);
+            return dbContext.Characters.Include(e => e.Episodes).ThenInclude(ee => ee.Episode)
+                .Include(f => f.Friends).ThenInclude(ff => ff.Friend).FirstOrDefault(c => c.Id == id);
         }
     }
 }

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\src\RestApp.Data\RestApp.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Functional\" />
+  </ItemGroup>
+
 </Project>

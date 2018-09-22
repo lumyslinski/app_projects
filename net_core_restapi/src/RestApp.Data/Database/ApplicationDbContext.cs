@@ -8,6 +8,8 @@ namespace RestApp.Data.Database
     {
         #region Properties
         public DbSet<CharacterModelDatabase> Characters { get; set; }
+        public DbSet<CharacterEpisodeModelDatabase> CharacterEpisodes { get; set; }
+        public DbSet<CharacterFriendModelDatabase> CharacterFriends { get; set; }
         public DbSet<EpisodeModelDatabase> Episodes { get; set; }
         #endregion Properties
 
