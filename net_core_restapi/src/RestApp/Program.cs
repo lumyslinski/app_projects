@@ -27,6 +27,8 @@ namespace RestApp
         public static IWebHostBuilder BuildWeb(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .CaptureStartupErrors(true)
+                .UseSetting("detailedErrors", "true")
                 // TODO:
                 // add proper cross platform https support
                 // disable here https with self signed certificate

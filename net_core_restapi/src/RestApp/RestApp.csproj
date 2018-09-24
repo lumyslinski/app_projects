@@ -29,6 +29,12 @@
   <ItemGroup>
     <ProjectReference Include="..\RestApp.Data\RestApp.Data.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RestApp.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <ItemGroup>
