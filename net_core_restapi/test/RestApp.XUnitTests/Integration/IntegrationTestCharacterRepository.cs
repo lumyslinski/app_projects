@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using RestApp.Data.Contracts;
 using RestApp.Data.Database;
 using RestApp.Data.Models;
 using RestApp.Data.Repositories;
-using RestApp.Data.Services;
 using Xunit;
 
 namespace RestApp.XUnitTests.Integration

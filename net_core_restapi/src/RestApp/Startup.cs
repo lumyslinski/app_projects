@@ -22,7 +22,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using RestApp.Data;
+using RestApp.Data.Contracts;
 using RestApp.Data.Database;
+using RestApp.Data.Repositories;
+using RestApp.Data.Services;
 using RestApp.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -74,16 +78,31 @@ namespace RestApp
         {
             try
             {
-                // Add framework services.
-                    services
-                    .AddMvc()
-                    .AddJsonOptions(opts =>
+                    // Add framework services.
+                    services.AddMvc().AddJsonOptions(opts =>
                     {
                         opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                         opts.SerializerSettings.Converters.Add(new StringEnumConverter
                         {
                             CamelCaseText = true
                         });
+                    });
+                    #region database
+                    services.AddEntityFrameworkSqlServer();
+                    //TODO:
+                    //send a question to .NET core team why if I use design-time factory the web app can not find an instance of DbContext?
+                    //according to the documentation https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dbcontext-creation#from-a-design-time-factory
+                    //framework should search firstly in application's startup project and then for the class which implemenets IDesignTimeDbContextFactory
+                    var dbContext = ApplicationDbContextContainer.GetInstance();
+                    services.AddSingleton(dbContext);
+                    services.AddScoped<ICharacterRepository, CharacterRepository>();
+                    services.AddScoped<IEpisodeRepository, EpisodeRepository>();
+                    services.AddScoped<ICharacterService, CharacterService>();
+                    #endregion
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseSqlServer(Configuration.GetConnectionString("default"),
+                            sqlServerOptions => sqlServerOptions.MigrationsAssembly("RestApp.Data"));
                     });
                     services.AddSwaggerGen(c =>
                     {
@@ -100,19 +119,15 @@ namespace RestApp
                             },
                             TermsOfService = ""
                         });
-                    services.AddEntityFrameworkSqlServer();
-                    services.AddDbContext<ApplicationDbContext>();
-                
-                    c.CustomSchemaIds(type => type.FriendlyId(true));
-                    c.DescribeAllEnumsAsStrings();
-                    c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{hostingEnv.ApplicationName}.xml");
-                    // Sets the basePath property in the Swagger document generated
-                    c.DocumentFilter<BasePathFilter>("/mysltech/StarWarsApi/1.0.0");
-
-                    // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
-                    // Use [ValidateModelState] on Actions to actually validate it in C# as well!
-                    c.OperationFilter<GeneratePathParamsValidationFilter>();
-                });
+                        c.CustomSchemaIds(type => type.FriendlyId(true));
+                        c.DescribeAllEnumsAsStrings();
+                        c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{hostingEnv.ApplicationName}.xml");
+                        // Sets the basePath property in the Swagger document generated
+                        c.DocumentFilter<BasePathFilter>("/api_v1");
+                        // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
+                        // Use [ValidateModelState] on Actions to actually validate it in C# as well!
+                        c.OperationFilter<GeneratePathParamsValidationFilter>();
+                    });
             }
             catch (Exception exception)
             {
@@ -128,6 +143,8 @@ namespace RestApp
         /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
             if (this.exceptions.Any(p => p.Value.Any()))
             {
                 app.Run(
@@ -146,34 +163,25 @@ namespace RestApp
                     });
                 return;
             }
-            app
-                .UseMvc()
-                .UseDefaultFiles()
-                .UseStaticFiles()
-                .UseSwagger()
+            app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseSwagger()
                 .UseSwaggerUI(c =>
                 {
                     //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
                     c.SwaggerEndpoint("/swagger/1.0.0/swagger.json", "Star Wars API");
-
-                    //TODO: Or alternatively use the original Swagger contract that's included in the static files
-                    // c.SwaggerEndpoint("/swagger-original.json", "Star Wars API Original");
                 });
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseHsts();
             }
-            //// create a service scope to get an ApplicationDbContext instance using DI
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    var dbCtx = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            //    dbCtx.Database.Migrate();
-            //}
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace RestApp
 {
@@ -15,7 +16,7 @@ namespace RestApp
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            BuildWeb(args).Build().Run();
         }
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace RestApp
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder BuildWeb(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 // TODO:

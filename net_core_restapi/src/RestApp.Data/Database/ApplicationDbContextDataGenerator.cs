@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.ExpressionTranslators.Internal;
 using RestApp.Data.Models;
 
 namespace RestApp.Data.Database

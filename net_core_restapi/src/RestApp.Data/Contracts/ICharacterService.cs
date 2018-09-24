@@ -6,7 +6,7 @@ namespace RestApp.Data.Contracts
     public interface ICharacterService
     {
         CharacterServiceResult Create(ICharacterModel item);
-        IEnumerable<ICharacterModel> Read();
+        IEnumerable<ICharacterModel> Read(string searchString = null, int? skip = null, int? limit = null);
         CharacterServiceResult Update(ICharacterModel item);
         CharacterServiceResult Delete(int id);
     }

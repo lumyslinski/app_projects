@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RestApp.Data.Contracts;
 using RestApp.Data.Database;
 using RestApp.Data.Models;
@@ -49,7 +48,7 @@ namespace RestApp.XUnitTests.Integration
             }
             catch (Exception exp)
             {
-                throw;
+                throw exp;
             }
             finally
             {
@@ -96,7 +95,7 @@ namespace RestApp.XUnitTests.Integration
             }
             catch (Exception exp)
             {
-                throw;
+                throw exp;
             }  
         }
 
@@ -122,8 +121,13 @@ namespace RestApp.XUnitTests.Integration
                             Friends = new List<string>() { "Darth Vader", "Rey" }
                         };
                         var createResult = characterService.Create(getTestItem);
-                        Assert.True(createResult.ResultIsOk);
                         newId = createResult.ResultId;
+                        Assert.True(createResult.ResultIsOk);
+                        var getItemCreated = characterService.GetItemById(newId);
+                        Assert.True(getItemCreated.Episodes.Count() == 4);
+                        Assert.True(getItemCreated.Episodes.LastOrDefault() == "FORCE");
+                        Assert.True(getItemCreated.Friends.Count() == 2);
+                        Assert.True(getItemCreated.Friends.FirstOrDefault() == "Darth Vader");
                     }
                     else
                     {
@@ -131,13 +135,15 @@ namespace RestApp.XUnitTests.Integration
                     }
                     getTestItem.Id = newId;
                     getTestItem.Name = "Kyle";
-                    getTestItem.Episodes = new List<string>() {"NEWHOPE", "JEDI", "FORCE"};
-                    getTestItem.Friends = new List<string>() {"Rey"};
+                    getTestItem.Episodes = new List<string>() { "OLDHOPE", "JEDI", "FORCE" };
+                    getTestItem.Friends = new List<string>()  { "Rey", "Junior Vader" };
                     var updateResult = characterService.Update(getTestItem);
                     Assert.True(updateResult.ResultIsOk);
                     var getItem = characterService.GetItemById(newId);
-                    Assert.True(getTestItem.Episodes.Count() == 3);
-                    Assert.True(getTestItem.Friends.Count() == 1);
+                    Assert.True(getItem.Episodes.Count() == 3);
+                    Assert.Contains("OLDHOPE", getItem.Episodes);
+                    Assert.True(getItem.Friends.Count() == 2);
+                    Assert.Contains("Junior Vader", getItem.Friends);
                     characterService.Delete(newId);
                     getItem = characterService.GetItemById(newId);
                     Assert.Null(getItem);
@@ -145,7 +151,7 @@ namespace RestApp.XUnitTests.Integration
             }
             catch (Exception exp)
             {
-                throw;
+                throw exp;
             }
         }
     }

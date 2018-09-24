@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using RestApp.Attributes;
+using RestApp.Data.Contracts;
 using RestApp.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -24,7 +25,16 @@ namespace RestApp.Controllers
     /// </summary>
     public class CharacterController : BaseController
     {
-      
+        private readonly ICharacterService characterService;
+
+        /// <summary>
+        /// CharacterController
+        /// </summary>
+        /// <param name="characterService">reference to instance of CharacterRepository</param>
+        public CharacterController(ICharacterService characterService)
+        {
+            this.characterService = characterService;
+        }
 
         /// <summary>
         /// adds an character item
@@ -35,22 +45,18 @@ namespace RestApp.Controllers
         /// <response code="400">invalid input, object invalid</response>
         /// <response code="409">an existing item already exists</response>
         [HttpPost]
-        [Route("/mysltech/StarWarsApi/1.0.0/characters")]
+        [Route("/api_v1/characters")]
         [ValidateModelState]
         [SwaggerOperation("AddCharacter")]
         public virtual IActionResult AddCharacter([FromBody]CharacterModelDataContract characterModel)
-        { 
-            //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(201);
-
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
-
-            //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(409);
-
-
-            throw new NotImplementedException();
+        {
+            var result = this.characterService.Create(characterModel);
+            if (result == null) return this.NoContent();
+            if (result.ResultIsOk==false)
+            {
+                return this.BadRequest(result.Error);
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -61,19 +67,18 @@ namespace RestApp.Controllers
         /// <response code="400">Invalid ID supplied</response>
         /// <response code="404">Character not found</response>
         [HttpDelete]
-        [Route("/mysltech/StarWarsApi/1.0.0/characters/{characterId}")]
+        [Route("/api_v1/characters/{characterId}")]
         [ValidateModelState]
         [SwaggerOperation("DeleteCharacter")]
-        public virtual IActionResult DeleteCharacter([FromRoute][Required]long? characterId)
-        { 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
-
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-
-            throw new NotImplementedException();
+        public virtual IActionResult DeleteCharacter([FromRoute][Required]int characterId)
+        {
+            var result = this.characterService.Delete(characterId);
+            if (result == null) return this.NotFound();
+            if (result.ResultIsOk == false)
+            {
+                return this.BadRequest(result.Error);
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -84,21 +89,18 @@ namespace RestApp.Controllers
         /// <param name="skip">number of records to skip for pagination</param>
         /// <param name="limit">maximum number of records to return</param>
         /// <response code="200">search results matching criteria</response>
+        /// <response code="404">Characters not found</response>
         /// <response code="400">bad input parameter</response>
         [HttpGet]
-        [Route("/mysltech/StarWarsApi/1.0.0/characters")]
+        [Route("/api_v1/characters")]
         [ValidateModelState]
         [SwaggerOperation("GetListOfCharacters")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<CharacterModelDataContract>), description: "search results matching criteria")]
         public virtual IActionResult GetListOfCharacters([FromQuery]string searchString, [FromQuery]int? skip, [FromQuery][Range(0, 50)]int? limit)
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<CharacterModelDataContract>));
-
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
-
-            return new ObjectResult(null);
+        {
+            var result = this.characterService.Read(searchString,skip,limit);
+            if (result == null) return this.NotFound();
+            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -106,27 +108,28 @@ namespace RestApp.Controllers
         /// </summary>
         
         /// <param name="body">Character object that needs to be added first</param>
-        /// <param name="characterId">Character id to delete</param>
+        /// <param name="characterId">Character id to update</param>
         /// <response code="400">Invalid ID supplied</response>
         /// <response code="404">Character not found</response>
         /// <response code="405">Validation exception</response>
         [HttpPut]
-        [Route("/mysltech/StarWarsApi/1.0.0/characters/{characterId}")]
+        [Route("/api_v1/characters/{characterId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateCharacter")]
-        public virtual IActionResult UpdateCharacter([FromBody]CharacterModelDataContract body, [FromRoute][Required]long? characterId)
-        { 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
+        public virtual IActionResult UpdateCharacter([FromBody]CharacterModelDataContract body, [FromRoute][Required]int characterId)
+        {
+            if (characterId != body.Id) return this.ValidationProblem();
+            else
+            {
+                var result = this.characterService.Update(body);
+                if (result == null) return this.NotFound();
+                if (result.ResultIsOk == false)
+                {
+                    return this.BadRequest(result.Error);
+                }
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(405);
-
-
-            throw new NotImplementedException();
+                return new OkObjectResult(result);
+            }
         }
     }
 }

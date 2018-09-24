@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestApp.Data.Models;
 
 namespace RestApp.Data.Database
@@ -42,6 +41,8 @@ namespace RestApp.Data.Database
             modelBuilder.Entity<CharacterModelDatabase>().ToTable("Character");
             modelBuilder.Entity<CharacterModelDatabase>().Property(i => i.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<CharacterModelDatabase>().HasData(generator.GetCharacters());
+            modelBuilder.Entity<CharacterModelDatabase>().HasMany(i => i.Episodes).WithOne(i => i.Character).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CharacterModelDatabase>().HasMany(i => i.Friends).WithOne(i => i.Character).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CharacterEpisodeModelDatabase>().ToTable("CharacterEpisode");
             modelBuilder.Entity<CharacterEpisodeModelDatabase>().HasKey(ce => new { ce.CharacterId, ce.EpisodeId });

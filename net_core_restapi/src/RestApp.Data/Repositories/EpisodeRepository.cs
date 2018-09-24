@@ -20,8 +20,14 @@ namespace RestApp.Data.Repositories
         public int Create(EpisodeModelDatabase item)
         {
             this.dbContext.Episodes.Add(item);
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
             return item.Id;
+        }
+
+        public void CreateRange(List<EpisodeModelDatabase> newEpisodes)
+        {
+            this.dbContext.Episodes.AddRange(newEpisodes);
+            this.dbContext.SaveChanges();
         }
 
         public void Delete(int id)
@@ -34,7 +40,7 @@ namespace RestApp.Data.Repositories
             }
         }
 
-        public IEnumerable<EpisodeModelDatabase> Read()
+        public IEnumerable<EpisodeModelDatabase> Read(string searchString = null, int? skip = null, int? limit = null)
         {
             return dbContext.Episodes.AsEnumerable();
         }

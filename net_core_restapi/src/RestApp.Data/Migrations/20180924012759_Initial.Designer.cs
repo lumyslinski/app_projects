@@ -9,8 +9,8 @@ using RestApp.Data.Database;
 namespace RestApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180922042855_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20180924012759_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

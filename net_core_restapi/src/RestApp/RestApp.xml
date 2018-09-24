@@ -35,6 +35,12 @@
             
             </summary>
         </member>
+        <member name="M:RestApp.Controllers.CharacterController.#ctor(RestApp.Data.Contracts.ICharacterService)">
+            <summary>
+            CharacterController
+            </summary>
+            <param name="characterService">reference to instance of CharacterRepository</param>
+        </member>
         <member name="M:RestApp.Controllers.CharacterController.AddCharacter(RestApp.Models.CharacterModelDataContract)">
             <summary>
             adds an character item
@@ -45,7 +51,7 @@
             <response code="400">invalid input, object invalid</response>
             <response code="409">an existing item already exists</response>
         </member>
-        <member name="M:RestApp.Controllers.CharacterController.DeleteCharacter(System.Nullable{System.Int64})">
+        <member name="M:RestApp.Controllers.CharacterController.DeleteCharacter(System.Int32)">
             <summary>
             Deletes a character
             </summary>
@@ -62,14 +68,15 @@
             <param name="skip">number of records to skip for pagination</param>
             <param name="limit">maximum number of records to return</param>
             <response code="200">search results matching criteria</response>
+            <response code="404">Characters not found</response>
             <response code="400">bad input parameter</response>
         </member>
-        <member name="M:RestApp.Controllers.CharacterController.UpdateCharacter(RestApp.Models.CharacterModelDataContract,System.Nullable{System.Int64})">
+        <member name="M:RestApp.Controllers.CharacterController.UpdateCharacter(RestApp.Models.CharacterModelDataContract,System.Int32)">
             <summary>
             Update an existing character
             </summary>
             <param name="body">Character object that needs to be added first</param>
-            <param name="characterId">Character id to delete</param>
+            <param name="characterId">Character id to update</param>
             <response code="400">Invalid ID supplied</response>
             <response code="404">Character not found</response>
             <response code="405">Validation exception</response>
@@ -178,7 +185,7 @@
             </summary>
             <param name="args"></param>
         </member>
-        <member name="M:RestApp.Program.CreateWebHostBuilder(System.String[])">
+        <member name="M:RestApp.Program.BuildWeb(System.String[])">
             <summary>
             CreateWebHostBuilder
             </summary>

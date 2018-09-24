@@ -1,8 +1,10 @@
-﻿using RestApp.Data.Models;
+﻿using System.Collections.Generic;
+using RestApp.Data.Models;
 
 namespace RestApp.Data.Contracts
 {
-    public interface IEpisodeRepository: IGenericRepository<EpisodeModelDatabase>
+    public interface IEpisodeRepository : IGenericRepository<EpisodeModelDatabase>
     {
+        
     }
 }
