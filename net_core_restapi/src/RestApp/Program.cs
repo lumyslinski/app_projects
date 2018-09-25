@@ -28,7 +28,7 @@ namespace RestApp
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .CaptureStartupErrors(true)
-                .UseSetting("detailedErrors", "true")
+                .UseSetting("detailedErrors", "true");
                 // TODO:
                 // add proper cross platform https support
                 // disable here https with self signed certificate
@@ -36,9 +36,9 @@ namespace RestApp
                 // dbug: HttpsConnectionAdapter[1]
                 // Failed to authenticate HTTPS connection.
                 // System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Loopback, 5000);
-                });
+                //.UseKestrel(options =>
+                //{
+                //    options.Listen(IPAddress.Any, 5000);
+                //});
     }
 }

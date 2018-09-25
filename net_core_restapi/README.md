@@ -33,9 +33,10 @@ Failed to authenticate HTTPS connection.
 System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
 ```
 ## Run in Docker
+For some reason I could not set any other port than 80 as external port...
 ```
 docker stop nc2_restapp
 docker rm nc2_restapp
 docker build -t restapp .
-docker -D run --name nc2_restapp -p 5000:7777 restapp
+docker run --name nc2_restapp -p 80:80 restapp:latest
 ```
