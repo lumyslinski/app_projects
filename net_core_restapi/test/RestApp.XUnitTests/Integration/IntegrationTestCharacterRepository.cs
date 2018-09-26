@@ -147,6 +147,8 @@ namespace RestApp.XUnitTests.Integration
                 {
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
+                    CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                    CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
                     var newItem = new CharacterModelDatabase()
                     {
                         Name = "JustForTest"
@@ -209,6 +211,8 @@ namespace RestApp.XUnitTests.Integration
                     Assert.NotNull(updatedItemFriend.Friends);
                     Assert.True(updatedItemFriend.Friends.FirstOrDefault().Friend.Name == "Darth Vader");
                     #endregion
+                    characterEpisodeRepository.Delete(newId);
+                    characterFriendRepository.Delete(newId);
                     characterRepository.Delete(newId);
                     var testItem = characterRepository.GetItem(newId);
                     Assert.Null(testItem);

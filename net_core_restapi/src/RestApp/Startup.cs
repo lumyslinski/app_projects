@@ -88,22 +88,14 @@ namespace RestApp
                         });
                     });
                     #region database
-                    services.AddEntityFrameworkSqlServer();
-                    //TODO:
-                    //send a question to .NET core team why if I use design-time factory the web app can not find an instance of DbContext?
-                    //according to the documentation https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dbcontext-creation#from-a-design-time-factory
-                    //framework should search firstly in application's startup project and then for the class which implemenets IDesignTimeDbContextFactory
-                    var dbContext = ApplicationDbContextContainer.GetInstance();
-                    services.AddSingleton(dbContext);
+                    services.AddEntityFrameworkSqlite();
+                    services.AddScoped<ApplicationDbContext>(_ => new ApplicationDbContextDesignTimeDbContextFactory().Create());
                     services.AddScoped<ICharacterRepository, CharacterRepository>();
                     services.AddScoped<IEpisodeRepository, EpisodeRepository>();
+                    services.AddScoped<ICharacterEpisodeRepository, CharacterEpisodeRepository>();
+                    services.AddScoped<ICharacterFriendRepository, CharacterFriendRepository>();
                     services.AddScoped<ICharacterService, CharacterService>();
                     #endregion
-                    services.AddDbContext<ApplicationDbContext>(options =>
-                    {
-                        options.UseSqlServer(Configuration.GetConnectionString("default"),
-                            sqlServerOptions => sqlServerOptions.MigrationsAssembly("RestApp.Data"));
-                    });
                     services.AddSwaggerGen(c =>
                     {
                         c.SwaggerDoc("1.0.0", new Info
@@ -166,8 +158,7 @@ namespace RestApp
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseSwagger()
-                .UseSwaggerUI(c =>
+            app.UseSwagger().UseSwaggerUI(c =>
                 {
                     //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
                     c.SwaggerEndpoint("/swagger/1.0.0/swagger.json", "Star Wars API");
@@ -181,6 +172,14 @@ namespace RestApp
             else
             {
                 app.UseHsts();
+            }
+
+            // create a service scope to get an ApplicationDbContext instance using DI and create fresh db
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                dbContext.Database.EnsureDeleted();
+                dbContext.Database.EnsureCreated();
             }
         }
     }

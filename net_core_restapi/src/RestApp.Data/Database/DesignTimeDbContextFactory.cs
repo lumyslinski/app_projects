@@ -56,7 +56,7 @@ namespace RestApp.Data.Database
                 throw new ArgumentException($"{nameof(connectionString)} is null or empty.", nameof(connectionString));
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
             Console.WriteLine("MyDesignTimeDbContextFactory.Create(string): Connection string: {0}",connectionString);
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlite(connectionString);
             DbContextOptions<TContext> options = optionsBuilder.Options;
             return CreateNewInstance(options);
         }

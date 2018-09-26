@@ -40,7 +40,7 @@ namespace RestApp.Controllers
         /// adds an character item
         /// </summary>
         /// <remarks>Adds an item character to the system</remarks>
-        /// <param name="characterModel">Inventory item to add</param>
+        /// <param name="characterModel">Character item to add</param>
         /// <response code="201">item created</response>
         /// <response code="400">invalid input, object invalid</response>
         /// <response code="409">an existing item already exists</response>
@@ -106,7 +106,6 @@ namespace RestApp.Controllers
         /// <summary>
         /// Update an existing character
         /// </summary>
-        
         /// <param name="body">Character object that needs to be added first</param>
         /// <param name="characterId">Character id to update</param>
         /// <response code="400">Invalid ID supplied</response>

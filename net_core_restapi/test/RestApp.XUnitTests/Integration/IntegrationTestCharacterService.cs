@@ -23,7 +23,9 @@ namespace RestApp.XUnitTests.Integration
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
                     EpisodeRepository episodeRepository = new EpisodeRepository(dbContext);
-                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository);
+                    CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
+                    CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository, characterFriendRepository, characterEpisodeRepository);
                     readResult = characterService.Read();
                     Assert.NotNull(readResult);
                     var firstCharacter = readResult.FirstOrDefault();
@@ -69,7 +71,9 @@ namespace RestApp.XUnitTests.Integration
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
                     EpisodeRepository episodeRepository = new EpisodeRepository(dbContext);
-                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository);
+                    CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
+                    CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository, characterFriendRepository, characterEpisodeRepository);
                     var getTestItem = characterService.GetItemByName("Kylo");
                     var newId = 0;
                     if (getTestItem == null)
@@ -109,7 +113,9 @@ namespace RestApp.XUnitTests.Integration
                     Assert.NotNull(dbContext);
                     CharacterRepository characterRepository = new CharacterRepository(dbContext);
                     EpisodeRepository episodeRepository = new EpisodeRepository(dbContext);
-                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository);
+                    CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
+                    CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                    CharacterService characterService = new CharacterService(characterRepository, episodeRepository, characterFriendRepository, characterEpisodeRepository);
                     var getTestItem = characterService.GetItemByName("Kylo");
                     var newId = 0;
                     if (getTestItem == null)

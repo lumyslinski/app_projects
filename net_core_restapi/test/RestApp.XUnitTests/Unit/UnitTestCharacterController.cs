@@ -25,8 +25,11 @@ namespace RestApp.XUnitTests.Unit
                 Assert.NotNull(dbContext);
                 CharacterRepository characterRepository = new CharacterRepository(dbContext);
                 EpisodeRepository episodeRepository = new EpisodeRepository(dbContext);
+                CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
+                CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                CharacterService characterService = new CharacterService(characterRepository, episodeRepository, characterFriendRepository, characterEpisodeRepository);
                 // Arrange
-                var controller = new CharacterController(new CharacterService(characterRepository, episodeRepository));
+                var controller = new CharacterController(characterService);
                 // Act
                 var result = controller.GetListOfCharacters("",null,null);
 
@@ -76,8 +79,11 @@ namespace RestApp.XUnitTests.Unit
                 Assert.NotNull(dbContext);
                 CharacterRepository characterRepository = new CharacterRepository(dbContext);
                 EpisodeRepository episodeRepository = new EpisodeRepository(dbContext);
+                CharacterEpisodeRepository characterEpisodeRepository = new CharacterEpisodeRepository(dbContext);
+                CharacterFriendRepository characterFriendRepository = new CharacterFriendRepository(dbContext);
+                CharacterService characterService = new CharacterService(characterRepository, episodeRepository, characterFriendRepository, characterEpisodeRepository);
                 // Arrange
-                var controller = new CharacterController(new CharacterService(characterRepository, episodeRepository));
+                var controller = new CharacterController(characterService);
                 // act create
                 var newCharacter = new CharacterModelDataContract()
                 {

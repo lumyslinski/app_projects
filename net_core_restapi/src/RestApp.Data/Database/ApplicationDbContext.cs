@@ -31,6 +31,7 @@ namespace RestApp.Data.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
             var generator = new ApplicationDbContextDataGenerator();
                 generator.Init();
 

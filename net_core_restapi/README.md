@@ -1,6 +1,6 @@
 # RestApp in .NET Core 2.1 and Swagger
 
-This is a REST API for managing Star Wars characters. It uses entity framework and local ms sql for persistence layer. It uses also XUnit, Mock and Fluent Assertions.
+This is a REST API based on .NET Core 2.1 and Swagger for managing Star Wars characters. It uses entity framework and local SQLite database for persistence layer. It uses also XUnit, Mock and Fluent Assertions.
 
 Data project is separated from the Web project. To manage database You should use these commands:
 
@@ -24,7 +24,7 @@ Entity framework does not support primitive types such as a list of string. Ther
 ####2. Database managment
 In order to generate a table in code approach we should use migrations commands as above. But, if we want to separate database project from web project then we have to move everything into another class library. To build a database context which is not configured in DI services in Startup file, we should implement [IDesignTimeDbContextFactory](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dbcontext-creation) which will be looking by a framework in the second step. It works for ef tools as above, but if we run a web project then the DbContext could not found. As a workaround I use:
 ```
-services.AddSingleton(dbContext);
+services.AddScoped<ApplicationDbContext>(_ => new ApplicationDbContextDesignTimeDbContextFactory().Create());
 ```
 ####3. Problem with Kestrel and keys
 When Kestrel was running in default settings then I was receiving an error. So, I disabled SSL and https manually via a code in Program.Main.
@@ -33,7 +33,7 @@ Failed to authenticate HTTPS connection.
 System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
 ```
 ## Run in Docker
-For some reason I could not set any other port than 80 as external port...
+For some reason I could not set any other port than 80 as external port. Running in docker do not work yet because it does not support ms sql localdb. Resolved this by using SQLite.
 ```
 docker stop nc2_restapp
 docker rm nc2_restapp

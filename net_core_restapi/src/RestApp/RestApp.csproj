@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Work\lumyslinski\app_projects\net_core_restapi\src\RestApp\RestApp.xml</DocumentationFile>
+    <DocumentationFile>RestApp.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

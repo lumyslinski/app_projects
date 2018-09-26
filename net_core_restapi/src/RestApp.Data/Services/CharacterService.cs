@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using RestApp.Data.Contracts;
 using RestApp.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace RestApp.Data.Services
 {
     public class CharacterService : ICharacterService
     {
         private readonly ICharacterRepository characterRepository;
+        private readonly ICharacterFriendRepository characterFriendRepository;
         private readonly IEpisodeRepository episodeRepository;
+        private readonly ICharacterEpisodeRepository characterEpisodeRepository;
 
-        public CharacterService(ICharacterRepository characterRepository, IEpisodeRepository episodeRepository)
+        public CharacterService(ICharacterRepository characterRepository, IEpisodeRepository episodeRepository, ICharacterFriendRepository characterFriendRepository, ICharacterEpisodeRepository characterEpisodeRepository)
         {
             this.characterRepository = characterRepository;
             this.episodeRepository = episodeRepository;
+            this.characterEpisodeRepository = characterEpisodeRepository;
+            this.characterFriendRepository = characterFriendRepository;
         }
 
         public CharacterServiceResult Create(ICharacterModel item)
@@ -22,17 +27,17 @@ namespace RestApp.Data.Services
             var characterServiceResult = new CharacterServiceResult();
             try
             {
-                var newCharacterModelDatabase = new CharacterModelDatabase() { Id = item.Id, Name = item.Name };
+                var newCharacterModelDatabase = new CharacterModelDatabase() { Name = item.Name };
                 var newCharacterModelDatabaseId = this.characterRepository.Create(newCharacterModelDatabase);
                 if (item.Episodes != null && item.Episodes.Any())
                 {
                     var addedResult = AddNewCharacterEpisodes(newCharacterModelDatabaseId, item.Episodes);
-                    this.characterRepository.CreateCharacterEpisodes(addedResult.CharacterEpisodes);
+                    this.characterEpisodeRepository.Create(addedResult.CharacterEpisodes);
                 }
                 if (item.Friends != null && item.Friends.Any())
                 {
                     var addedResult = AddNewCharacterFriends(newCharacterModelDatabaseId, item.Friends);
-                    this.characterRepository.CreateCharacterFriends(addedResult.CharacterFriends);
+                    this.characterFriendRepository.Create(addedResult.CharacterFriends);
                 }
                 characterServiceResult.ResultId = newCharacterModelDatabaseId;
             }
@@ -55,9 +60,9 @@ namespace RestApp.Data.Services
                 {
                     foundFriend = new CharacterModelDatabase() {Name = itemFriend};
                     this.characterRepository.Create(foundFriend);
-                    result.CharacterFriendsChanged.Add(new CharacterFriendModelDatabase() { CharacterId = characterId, FriendId = foundFriend.Id, Friend = foundFriend });
+                    result.CharacterFriendsChanged.Add(new CharacterFriendModelDatabase() { CharacterId = characterId, FriendId = foundFriend.Id });
                 }
-                result.CharacterFriends.Add(new CharacterFriendModelDatabase() { CharacterId = characterId, FriendId = foundFriend.Id, Friend = foundFriend });
+                result.CharacterFriends.Add(new CharacterFriendModelDatabase() { CharacterId = characterId, FriendId = foundFriend.Id });
             }
             return result;
         }
@@ -73,9 +78,9 @@ namespace RestApp.Data.Services
                 {
                     foundEpisode = new EpisodeModelDatabase() { Name = itemEpisode };
                     this.episodeRepository.Create(foundEpisode);
-                    resultCharacterEpisodes.CharacterEpisodesChanged.Add(new CharacterEpisodeModelDatabase() { CharacterId = characterId, EpisodeId = foundEpisode.Id, Episode = foundEpisode });
+                    resultCharacterEpisodes.CharacterEpisodesChanged.Add(new CharacterEpisodeModelDatabase() { CharacterId = characterId, EpisodeId = foundEpisode.Id });
                 }
-                resultCharacterEpisodes.CharacterEpisodes.Add(new CharacterEpisodeModelDatabase(){ CharacterId = characterId, EpisodeId = foundEpisode.Id, Episode = foundEpisode });
+                resultCharacterEpisodes.CharacterEpisodes.Add(new CharacterEpisodeModelDatabase(){ CharacterId = characterId, EpisodeId = foundEpisode.Id});
             }
             return resultCharacterEpisodes;
         }
@@ -85,8 +90,14 @@ namespace RestApp.Data.Services
             var characterServiceResult = new CharacterServiceResult();
             try
             {
+                this.characterEpisodeRepository.Delete(id);
+                this.characterFriendRepository.Delete(id);
                 this.characterRepository.Delete(id);
                 characterServiceResult.ResultId = id;
+            }
+            catch (DbUpdateConcurrencyException exp) 
+            {
+                characterServiceResult.Error = exp.Message;
             }
             catch (Exception exp)
             {
@@ -163,34 +174,22 @@ namespace RestApp.Data.Services
                     if (item.Episodes != null && item.Episodes.Any())
                     {
                         var updatedResult  = AddNewCharacterEpisodes(foundObject.Id, item.Episodes);
-                        if(updatedResult.CharacterEpisodesChanged.Any()) this.characterRepository.CreateCharacterEpisodes(updatedResult.CharacterEpisodesChanged);
-                        var episodesToRemove = new List<CharacterEpisodeModelDatabase>();
-                        foreach (var episodeModelDatabase in foundObject.Episodes)
-                        {
-                            if (!item.Episodes.Contains(episodeModelDatabase.Episode.Name)) episodesToRemove.Add(episodeModelDatabase);
-                        }
-                        foreach (var episodeModelDatabase in episodesToRemove)
-                        {
-                            foundObject.Episodes.Remove(episodeModelDatabase);
-                            this.characterRepository.DeleteCharacterEpisode(episodeModelDatabase);
-                        }
+                        if(updatedResult.CharacterEpisodesChanged.Any()) 
+                            this.characterEpisodeRepository.Create(updatedResult.CharacterEpisodesChanged);
+                        this.characterEpisodeRepository.Update(updatedResult.CharacterEpisodes);
+                        var characterEpisodesToDelete = foundObject.Episodes.Where(e => e.Episode != null && !item.Episodes.Contains(e.Episode.Name)).ToList();
+                        this.characterEpisodeRepository.Delete(characterEpisodesToDelete);
                     }
                     #endregion
                     #region friends
                     if (item.Friends != null && item.Friends.Any())
                     {
                         var updatedResult = AddNewCharacterFriends(foundObject.Id, item.Friends);
-                        if (updatedResult.CharacterFriendsChanged.Any()) this.characterRepository.CreateCharacterFriends(updatedResult.CharacterFriendsChanged);
-                        List<CharacterFriendModelDatabase> friendsToRemove = new List<CharacterFriendModelDatabase>();
-                        foreach (var friendModelDatabase in foundObject.Friends)
-                        {
-                            if (!item.Friends.Contains(friendModelDatabase.Friend.Name)) friendsToRemove.Add(friendModelDatabase);
-                        }
-                        foreach (var friendModelDatabase in friendsToRemove)
-                        {
-                            foundObject.Friends.Remove(friendModelDatabase);
-                            this.characterRepository.DeleteCharacterFriend(friendModelDatabase);
-                        }
+                        if (updatedResult.CharacterFriendsChanged.Any()) 
+                            this.characterFriendRepository.Create(updatedResult.CharacterFriendsChanged);
+                        this.characterFriendRepository.Update(updatedResult.CharacterFriends);
+                        var characterFriendsToDelete = foundObject.Friends.Where(e => e.Friend != null && !item.Friends.Contains(e.Friend.Name)).ToList();
+                        this.characterFriendRepository.Delete(characterFriendsToDelete);
                     }
                     #endregion
                     characterServiceResult.ResultId = foundObject.Id;
@@ -199,6 +198,10 @@ namespace RestApp.Data.Services
                 {
                     characterServiceResult.Error = "Object not found for update!";
                 }
+            }
+            catch (DbUpdateConcurrencyException exp) 
+            {
+                characterServiceResult.Error = exp.Message;
             }
             catch (Exception exp)
             {
