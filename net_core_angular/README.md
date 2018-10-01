@@ -18,15 +18,15 @@ Visually appealing modern UI (use some available solutions)
 
 Define an app secret consisting of a key and its value. The secret is associated with the project's UserSecretsId value. For example, run the following command from the directory in which the .csproj file exists:
 ```
-dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN"
+dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN" 
 ```
 ```
-dotnet user-secrets set "GoogleVisionApiSection:RestUrl" "https://vision.googleapis.com/v1/images:annotate?key={0}"
+dotnet user-secrets set "GoogleVisionApiSection:RestUrl" "https://vision.googleapis.com/v1/images:annotate?key={0}" 
 ```
-The Secret Manager tool can be used from other directories too. Use the --project option to supply the file system path at which the .csproj file exists. For example:
+The Secret Manager tool can be used from other directories too. Use the --project option to supply the file system path at which the .csproj file exists or specify the main project name in src directory. For example:
 
 ```
-dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN" --project "C:\apps\ImageApp\"
+dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN" --project "ImageApp"
 ```
 
 # References/sources:
