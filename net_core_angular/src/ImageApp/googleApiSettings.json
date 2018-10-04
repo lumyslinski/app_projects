@@ -1,6 +1,0 @@
-{
-  "GoogleVisionApiSection": {
-    "RestUrl": "https://vision.googleapis.com/v1/images:annotate?key={0}",
-    "RestToken": "AIzaSyCZP4taWrYTvMoTONzehspP1Z3yXLloQXY"
-  }
-}

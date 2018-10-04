@@ -1,6 +1,7 @@
 *.swp
 *.*~
 project.lock.json
+googleApiSettings.json
 .DS_Store
 *.pyc
 nupkg/
@@ -20,6 +21,7 @@ uploaded/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+app/
 x64/
 x86/
 build/

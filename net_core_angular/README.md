@@ -16,6 +16,17 @@ Visually appealing modern UI (use some available solutions)
 - net core 2.1 with angular 6.1.4 and local SQLite database
 - due to problems with loading secrets on windows and linux platforms author switched to loading specific googleApiSettings.json file
 
+### File googleApiSettings.json
+The format of this file should look like:
+```
+{
+  "GoogleVisionApiSection": {
+    "RestUrl": "https://vision.googleapis.com/v1/images:annotate?key={0}",
+    "RestToken": "SECRET_TOKEN_FOR_GOOGLEVISION"
+  }
+}
+```
+
 # References/sources:
 - This project is based on the https://github.com/bleenco/ngx-uploader with original lightbox https://lokeshdhakar.com/projects/lightbox2/
 - I also used a style from https://cloud.google.com/vision/docs/drag-and-drop
