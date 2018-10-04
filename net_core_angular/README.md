@@ -10,10 +10,7 @@ Instagram-like image hosting application that additionally performs computer vis
 ![Demo flow](demo.gif?raw=true "Demo flow")
 ### Requirements to run this project:
 - net core 2.1 with angular 6.1.4 and local SQLite database
-- due to problems with loading secrets on windows and linux platforms author switched to loading specific googleApiSettings.json file
-
-### File googleApiSettings.json
-The format of this file should look like:
+- due to problems with loading secrets on windows and linux platforms author switched to loading specific googleApiSettings.json file. The format of this file should look like:
 ```
 {
   "GoogleVisionApiSection": {
