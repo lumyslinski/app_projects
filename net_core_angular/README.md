@@ -22,14 +22,14 @@ Visually appealing modern UI (use some available solutions)
 - To create request and response models I used http://json2csharp.com/ 
 
 ## Run in Docker
-Running in docker do not work yet because it does not support ms sql localdb. Resolved this by using SQLite.
+Running in docker ON WINDOWS do not work - there is no communication between net core and angular. I tested it on ubuntu 18.04 and everything is working very good.
 ```
 docker stop nc2_imageapp
 docker rm nc2_imageapp
 docker build -t imageapp .
-docker run --name nc2_imageapp -p 80:80 imageapp:latest
+docker run --name nc2_imageapp -p 5000:5000 imageapp:latest
 ```
 
 # TO DO
-- More tests and mocks
+- Tests
 - More separated components in angular
