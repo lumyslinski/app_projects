@@ -13,28 +13,23 @@ Visually appealing modern UI (use some available solutions)
 # Project
 ![Demo flow](demo.gif?raw=true "Demo flow")
 ### Requirements to run this project:
-- net core 2.1 with angular 6.1.4 and local MS SQL database
-- [set url and secret token for google vision api](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=windows)
-
-Define an app secret consisting of a key and its value. The secret is associated with the project's UserSecretsId value. For example, run the following command from the directory in which the .csproj file exists:
-```
-dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN" 
-```
-```
-dotnet user-secrets set "GoogleVisionApiSection:RestUrl" "https://vision.googleapis.com/v1/images:annotate?key={0}" 
-```
-The Secret Manager tool can be used from other directories too. Use the --project option to supply the file system path at which the .csproj file exists or specify the main project name in src directory. For example:
-
-```
-dotnet user-secrets set "GoogleVisionApiSection:RestToken" "TOKEN" --project "ImageApp"
-```
+- net core 2.1 with angular 6.1.4 and local SQLite database
+- due to problems with loading secrets on windows and linux platforms author switched to loading specific googleApiSettings.json file
 
 # References/sources:
 - This project is based on the https://github.com/bleenco/ngx-uploader with original lightbox https://lokeshdhakar.com/projects/lightbox2/
 - I also used a style from https://cloud.google.com/vision/docs/drag-and-drop
 - To create request and response models I used http://json2csharp.com/ 
 
+## Run in Docker
+Running in docker do not work yet because it does not support ms sql localdb. Resolved this by using SQLite.
+```
+docker stop nc2_imageapp
+docker rm nc2_imageapp
+docker build -t imageapp .
+docker run --name nc2_imageapp -p 80:80 imageapp:latest
+```
+
 # TO DO
 - More tests and mocks
 - More separated components in angular
-- Add docker to run everything in release version

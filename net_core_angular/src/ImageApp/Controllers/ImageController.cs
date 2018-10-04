@@ -55,8 +55,8 @@ namespace ImageApp.Controllers
                 if (deleted.IsOk)
                 {
                     string webRootPath  = hostingEnvironment.WebRootPath;
-                    string uploadedFilePath = Path.Combine(webRootPath, deleted.Data.ContentImageUrl.Replace('/', '\\').TrimStart('\\'));
-                    string uploadedFileThumbPath = Path.Combine(webRootPath, deleted.Data.ContentImageUrlThumb.Replace('/', '\\').TrimStart('\\'));
+                    string uploadedFilePath = Path.Combine(webRootPath, GetPath(deleted.Data.ContentImageUrl));
+                    string uploadedFileThumbPath = Path.Combine(webRootPath, GetPath(deleted.Data.ContentImageUrlThumb));
                     System.IO.File.Delete(uploadedFilePath);
                     System.IO.File.Delete(uploadedFileThumbPath);
                     result = "ok";
@@ -71,6 +71,10 @@ namespace ImageApp.Controllers
                 result = exp.Message;
             }
             return new JsonResult(result, JsonSettings);
+        }
+
+        private string GetPath(string path) {
+            return path.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
         }
     }
 }

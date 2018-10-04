@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using ImageApp.Data.Contracts;
@@ -63,7 +64,7 @@ namespace ImageApp
                     services.AddScoped<IImageWebMatchesRepository, ImageWebMatchesRepository>();
                     services.AddScoped<IImageService, ImageService>();
                     #endregion
-                    services.AddSpaStaticFiles(conf => { conf.RootPath = "ClientApp/dist"; });
+                    services.AddSpaStaticFiles(conf => { conf.RootPath = Path.Combine("ClientApp","dist"); });
                 }
                 else
                 {
