@@ -26,6 +26,7 @@ The format of this file should look like:
   }
 }
 ```
+Remember to set up this file in main directory (src/ImageApp/) before You proceed with docker. 
 
 # References/sources:
 - This project is based on the https://github.com/bleenco/ngx-uploader with original lightbox https://lokeshdhakar.com/projects/lightbox2/
