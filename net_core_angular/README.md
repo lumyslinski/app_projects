@@ -19,7 +19,7 @@ Instagram-like image hosting application that additionally performs computer vis
   }
 }
 ```
-Remember to set up this file in main directory (src/ImageApp/) before You proceed with docker. 
+Remember to set up this file in main directory (src/ImageApp/) before You start the project or build it via docker. 
 
 # References/sources:
 - This project is based on the https://github.com/bleenco/ngx-uploader with original lightbox https://lokeshdhakar.com/projects/lightbox2/
